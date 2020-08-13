@@ -12,15 +12,22 @@
     <img class="logo" src="BlogPostLogo.png" alt="logo">
     <nav>
         <ul class="navLinks">
-            <li><a href="#">Admin Login</a></li>
             <li><a href="#">Author Login</a></li>
+            <li><a href="#">Admin Login</a></li>
         </ul>
     </nav>
     <a class="cta" href="#">Contact</a>
 </header>
 <main>
+    <p th:text="${user}"></p>
+    <p th:text="${post}"></p>
+    <section style="background-color:gray;">
+        <h2>title of a blog post</h2>
+        <img src=""><span>author</span><span>date</span>
+        <p>excerpt</p>
+        <p>tags</p>
 
-
+    </section>
 </main>
 <footer></footer>
 </body>

@@ -1,4 +1,4 @@
-package model;
+package com.mountblue.blogpost.model;
 
 import com.sun.istack.NotNull;
 

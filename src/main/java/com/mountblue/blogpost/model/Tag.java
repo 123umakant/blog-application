@@ -1,22 +1,23 @@
-package model;
+package com.mountblue.blogpost.model;
 
 import com.sun.istack.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-@Entity
-public class User {
+import java.util.Date;
 
+@Entity
+public class Tag {
     @Id
     @GeneratedValue
     private long id;
     @NotNull
     private String name;
     @NotNull
-    private String email;
+    private Date createdAt;
     @NotNull
-    private String password;
+    private Date updatedAt;
 
     public long getId() {
         return id;
@@ -34,29 +35,29 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public String getPassword() {
-        return password;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
     public String toString() {
-        return "Comment{" +
+        return "Tag{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 }
