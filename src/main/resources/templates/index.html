@@ -8,30 +8,54 @@
     <link rel="stylesheet" th:href="@{indexStyle.css}">
 </head>
 <body>
-<header>
-    <img class="logo" src="BlogPostLogo.png" alt="logo">
-    <nav>
-        <ul class="navLinks">
-            <li><a href="#">Author Login</a></li>
-            <li><a href="#">Admin Login</a></li>
-        </ul>
-    </nav>
-    <a class="cta" href="#">Contact</a>
-</header>
+
+
 <main>
-    <p th:text="${user}"></p>
-    <p th:text="${post}"></p>
-    <section style="background-color:gray;">
-        <h2>title of a blog post</h2>
-        <img src=""><span>author</span><span>date</span>
-        <p>excerpt</p>
-        <p>tags</p>
+    <header class="div1">
+        <img class="logo" src="BlogPostLogo.png" alt="logo">
+        <nav>
+            <ul class="navLinks">
+                <li><a href="/userlogin" target="_blank">Author Login</a></li>
+                <li><a href="/user_signup" target="_blank">Author SignUp</a></li>
+                <li><a href="#">Admin Login</a></li>
+            </ul>
+        </nav>
+        <a class="cta" href="#">Contact</a>
+    </header>
 
+    <div class="div5">
 
+        <div><h2>Tags</h2></div>
+        <hr style="color:gray;margin-bottom:10px;">
+        <a class="tagStyle" href="#" th:each="items:${tags}">
+            <span th:text="${items.name}">Artificial</span>
+        </a>
+    </div>
 
+    <div class="div6">
 
-    </section>
+        <div class="card-container" th:each="items : ${post}">
+            <div class="city">
+                <a href="#">
+                    <div class="city-image">
+                        <img src="http://lorempixel.com/output/city-q-g-640-480-1.jpg" alt="city">
+                    </div>
+                    <div class="description">
+                        <h2 th:text="${items.title}">Title</h2>
+                        <h3 th:text="${items.excerpt}"></h3>
+                        <h4 th:text="${items.author}">Author</h4>
+                        <h5 th:text="${items.publishedAt}">Publish Date</h5>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="div7">
+        Footer
+    </div>
 </main>
-<footer></footer>
+
 </body>
 </html>

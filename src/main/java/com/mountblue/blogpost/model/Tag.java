@@ -1,11 +1,11 @@
 package com.mountblue.blogpost.model;
 
 import com.sun.istack.NotNull;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
+
 
 @Entity
 public class Tag {
@@ -55,7 +55,7 @@ public class Tag {
     public String toString() {
         return "Tag{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name=" + name +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
