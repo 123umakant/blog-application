@@ -12,7 +12,7 @@
 
 <main>
     <header class="div1">
-       <a th:href="@{/}"> <img class="logo"  src="BlogPostLogo.png" alt="logo"></a>
+        <a th:href="@{/}"> <img class="logo"  src="BlogPostLogo.png" alt="logo"></a>
         <nav>
             <ul class="navLinks">
                 <li><a href="/userlogin" target="_blank">Author Login</a></li>
@@ -43,6 +43,7 @@
                     <div class="description">
                         <h2 th:text="${items.title}">Title</h2>
                         <h3 th:text="${items.excerpt}"></h3>
+                         <P th:text="${items.content}"></P>
                         <h4 th:text="${items.author}">Author</h4>
                         <h5 th:text="${items.publishedAt}">Publish Date</h5>
                     </div>

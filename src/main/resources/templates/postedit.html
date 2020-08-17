@@ -34,24 +34,26 @@
             </thead>
             <tr>
                 <td><label>Title : </label></td>
-                <td><input type="text" name="title" placeholder="Enter Your post title" required><br></td>
+                <td><input type="text" name="title" th:value="${title}" placeholder="Enter Your post title" required><br></td>
             </tr>
             <tr>
                 <td><label>Enter your post excerpt : </label></td>
-                <td><input type="text" name="excerpt" placeholder="Enter Your post excerpt" required><br></td>
+                <td><input type="text" name="excerpt" th:value="${excerpt}" placeholder="Enter Your post excerpt" required><br></td>
             </tr>
             <tr>
                 <td><label>Enter your post content : </label></td>
-                <td><textarea style="margin: 0px;height: 86px; width: 192px;" name="content" placeholder="content"
+                <td><textarea style="margin: 0px;height: 86px; width: 192px;" name="content" th:value="${content}" placeholder="content"
                               required></textarea><br></td>
             </tr>
             <tr>
                 <td><label>Enter author name : </label></td>
-                <td><input  type="text" name="author" placeholder="Author Name" required></input><br></td>
+                <td><input  type="text" name="author" placeholder="Author Name" th:value="${author}" required></input><br></td>
             </tr>
             <input type="text" style="display:none" name="id"  th:value="${id}" />
-
-
+            <input type="text" style="display:none" name="visitor_id"  th:value="${visitor_id}" />
+            <input type="text" style="display:none" name="publishedAt"  th:value="${publishedAt}" />
+            <input type="text" style="display:none" name="createdAt"  th:value="${createdAt}" />
+            <input type="text" style="display:none" name="isPublished"  th:value="${isPublished}" />
 
         </table>
         <input style="margin-left: 33%;" type="submit">

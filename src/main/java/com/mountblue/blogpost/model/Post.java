@@ -29,6 +29,16 @@ public class Post {
     private Date createdAt;
     @NotNull
     private Date updatedAt;
+    @NotNull
+    private long visitor_id;
+
+    public long getVisitor_id() {
+        return visitor_id;
+    }
+
+    public void setVisitor_id(long visitor_id) {
+        this.visitor_id = visitor_id;
+    }
 
     public long getId() {
         return id;

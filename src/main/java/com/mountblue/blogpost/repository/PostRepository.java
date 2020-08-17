@@ -23,4 +23,10 @@ public class PostRepository {
         return entityManager.createQuery("SELECT e FROM Post e", Post.class).getResultList();
     }
 
+    public List<Post> findAllPostValue(long id) {
+
+       return entityManager.createNativeQuery("select * from Post where id="+id,Post.class).getResultList();
+    }
+
+
 }
