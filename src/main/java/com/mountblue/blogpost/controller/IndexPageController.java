@@ -1,20 +1,16 @@
 package com.mountblue.blogpost.controller;
 
 
+import com.mountblue.blogpost.model.Comment;
 import com.mountblue.blogpost.model.Post;
 import com.mountblue.blogpost.model.Visitor;
-import com.mountblue.blogpost.service.AuthorService;
-import com.mountblue.blogpost.service.PostService;
-import com.mountblue.blogpost.service.TagsService;
-import com.mountblue.blogpost.service.UserService;
+import com.mountblue.blogpost.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-
+import org.springframework.web.bind.annotation.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -33,8 +29,12 @@ public class IndexPageController {
     @Autowired
     AuthorService authorService;
 
+    @Autowired
+    CommentService commentService;
+
     Visitor author = new Visitor();
     Post post = new Post();
+    Comment commentModal = new Comment();
 
     @GetMapping("/")
     public String homePage(Model model) {
@@ -129,23 +129,66 @@ public class IndexPageController {
     @PostMapping("edit")
     public String editPost(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt,
                            @RequestParam("content") String content, @RequestParam("author") String author,
-                           @RequestParam("id") long id, @RequestParam("publishedAt") Date publishedAt,
-                           @RequestParam("createdAt") Date createdAt, @RequestParam("isPublished") boolean isPublished
-            , @RequestParam("visitor_id") long visitor_id,Model model)  {
+                           @RequestParam("id") long id, @RequestParam("publishedAt") String publishedAt,
+                           @RequestParam("createdAt") String createdAt, @RequestParam("isPublished") boolean isPublished
+            , @RequestParam("visitor_id") long visitor_id, Model model) throws ParseException {
 
-        System.out.println(publishedAt);
+        System.out.println(isPublished);
+        Date datePublishedAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(publishedAt);
+        Date dateCreatedAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(createdAt);
+
         post.setId(id);
         post.setTitle(title);
         post.setExcerpt(excerpt);
         post.setContent(content);
         post.setAuthor(author);
-        post.setPublishedAt(publishedAt);
+        post.setPublishedAt(datePublishedAt);
         post.setPublished(isPublished);
         post.setVisitor_id(visitor_id);
-        post.setCreatedAt(createdAt);
-
-        model.addAttribute("updatValues",post);
+        post.setCreatedAt(dateCreatedAt);
+        post.setUpdatedAt(new Date());
+        model.addAttribute("updatValues", post);
 
         return "postedit";
+    }
+
+    @GetMapping("edit")
+    public String getPost(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt,
+                          @RequestParam("content") String content, @RequestParam("author") String author,
+                          @RequestParam("id") long id, @RequestParam("publishedAt") String publishedAt,
+                          @RequestParam("createdAt") String createdAt, @RequestParam("isPublished") boolean isPublished
+            , @RequestParam("visitor_id") long visitor_id) throws ParseException {
+
+
+        post.setId(id);
+        post.setTitle(title);
+        post.setExcerpt(excerpt);
+        post.setContent(content);
+        post.setAuthor(author);
+        post.setVisitor_id(visitor_id);
+        post.setUpdatedAt(new Date());
+        post.setPublished(false);
+
+        postService.updatePost(post);
+
+        return "myblogs";
+    }
+
+    @PostMapping("saveComment")
+    public String getComment(@RequestParam("id") String id, @RequestParam("comment") String comment,
+                             @RequestParam("name") String name, @RequestParam("email") String email) {
+
+        commentModal.setPostId(Long.parseLong(id));
+        commentModal.setComment(comment);
+        commentModal.setName(name);
+        commentModal.setEmail(email);
+        commentService.saveComment(commentModal);
+        return "myblogs";
+    }
+
+    @ResponseBody
+    @GetMapping("getComment")
+    public String getComment(@RequestParam("postId") String postId) {
+        return commentService.retriveComments(postId);
     }
 }

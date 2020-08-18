@@ -2,7 +2,7 @@
 <html xmlns:th="https://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>User Sign_Up Portal</title>
+    <title>Author Edit Post Portal</title>
     <style>
         input{
         padding:5px;
@@ -17,43 +17,47 @@
 
     }
 
+
     </style>
 </head>
 <body>
 
 <div class="container-form">
 
-    <form action="post" method="post">
+    <form action="edit" method="get">
         <table>
             <thead>
             <tr>
-                <th colspan="2"><h2>Submit Your Post</h2>
+                <th colspan="2"><h2>Edit Your Post</h2>
                     <hr>
                 </th>
             </tr>
             </thead>
             <tr>
                 <td><label>Title : </label></td>
-                <td><input type="text" name="title" th:value="${title}" placeholder="Enter Your post title" required><br></td>
+                <td><input type="text" name="title" th:value="${updatValues.title}" placeholder="Enter Your post title"
+                           required><br></td>
             </tr>
             <tr>
                 <td><label>Enter your post excerpt : </label></td>
-                <td><input type="text" name="excerpt" th:value="${excerpt}" placeholder="Enter Your post excerpt" required><br></td>
+                <td><input type="text" name="excerpt" th:value="${updatValues.excerpt}"
+                           placeholder="Enter Your post excerpt" required><br></td>
             </tr>
             <tr>
                 <td><label>Enter your post content : </label></td>
-                <td><textarea style="margin: 0px;height: 86px; width: 192px;" name="content" th:value="${content}" placeholder="content"
+                <td><textarea style="margin: 0px;height: 86px; width: 192px;" name="content"
+                              th:text="${updatValues.content}" placeholder="content"
                               required></textarea><br></td>
+
             </tr>
             <tr>
                 <td><label>Enter author name : </label></td>
-                <td><input  type="text" name="author" placeholder="Author Name" th:value="${author}" required></input><br></td>
+                <td><input type="text" name="author" placeholder="Author Name" th:value="${updatValues.author}"
+                           required></input><br></td>
             </tr>
-            <input type="text" style="display:none" name="id"  th:value="${id}" />
-            <input type="text" style="display:none" name="visitor_id"  th:value="${visitor_id}" />
-            <input type="text" style="display:none" name="publishedAt"  th:value="${publishedAt}" />
-            <input type="text" style="display:none" name="createdAt"  th:value="${createdAt}" />
-            <input type="text" style="display:none" name="isPublished"  th:value="${isPublished}" />
+            <input type="text" style="display:none" name="id" th:value="${updatValues.id}"/>
+            <input type="text" style="display:none" name="visitor_id" th:value="${updatValues.visitor_id}"/>
+            <input type="text" style="display:none" name="isPublished" th:value="${updatValues.published}"/>
 
         </table>
         <input style="margin-left: 33%;" type="submit">

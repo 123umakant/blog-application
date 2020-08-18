@@ -19,14 +19,20 @@ public class PostRepository {
     public Post insertPost(Post post) {
         return entityManager.merge(post);
     }
+
     public List<Post> findAllPost() {
         return entityManager.createQuery("SELECT e FROM Post e", Post.class).getResultList();
     }
 
     public List<Post> findAllPostValue(long id) {
 
-       return entityManager.createNativeQuery("select * from Post where id="+id,Post.class).getResultList();
+        return entityManager.createNativeQuery("select * from Post where id=" + id, Post.class).getResultList();
     }
 
 
+    public void updatePostData(Post post) {
+         entityManager.createNativeQuery("update post set author='" + post.getAuthor() + "',content='"
+                + post.getContent() + "',excerpt='"+post.getExcerpt()+"',title='"+post.getTitle()+"',updated_at='"+
+                post.getUpdatedAt()+"' where id='"+post.getId()+"'").executeUpdate();
+    }
 }

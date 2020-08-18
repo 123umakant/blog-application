@@ -43,6 +43,7 @@
         <div class="card-container" th:each="items : ${post}">
             <div class="city">
                 <form action="edit" method="post">
+
                     <!--  <a th:href="@{/viewpost?id=} + ${items.id}">-->
                     <div class="city-image">
                         <img src="http://lorempixel.com/output/city-q-g-640-480-1.jpg" alt="city">
@@ -64,7 +65,7 @@
                     <input type="text" style="display:none" name="author" th:value="${items.author}">
                     <input type="text" style="display:none" name="publishedAt" th:value="${items.publishedAt}">
                     <input type="text" style="display:none" name="createdAt" th:value="${items.createdAt}">
-                    <input type="text" style="display:none" name="isPublished" th:value="${items.isPublished}">
+                    <input type="text" style="display:none" name="isPublished" th:value="${items.published}">
                     <input type="text" style="display:none" name="visitor_id" th:value="${items.visitor_id}">
                     <button style="padding:4px 30px;margin:5px;">Edit</button>
 

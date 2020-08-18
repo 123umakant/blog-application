@@ -37,4 +37,7 @@ public class PostService {
         return  postRepository.findAllPostValue(Long.parseLong(id));
     }
 
+    public void updatePost(Post post) {
+        postRepository.updatePostData(post);
+    }
 }
