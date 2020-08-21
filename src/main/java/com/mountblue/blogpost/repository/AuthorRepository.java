@@ -52,4 +52,15 @@ public class AuthorRepository {
                 Visitor.class).getResultList();
 
     }
+
+    public boolean verifyAdminDetail(String query) {
+        boolean flag = false;
+        List<Visitor> list = entityManager.createNativeQuery(query,Visitor.class).getResultList();
+
+        if (list.size() == 1) {
+            flag = true;
+        }
+
+        return flag;
+    }
 }

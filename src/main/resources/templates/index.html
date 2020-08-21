@@ -6,60 +6,84 @@
     <meta name="description" content="">
     <meta name="viewport" content="width:device-width,initial-scale=1">
     <link rel="stylesheet" th:href="@{indexStyle.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 <body>
-
-
 <main>
     <header class="div1">
-       <a th:href="@{/}"> <img class="logo"  src="BlogPostLogo.png" alt="logo"></a>
+        <a th:href="@{/}"> <img class="logo" src="BlogPostLogo.png" alt="logo"></a>
         <nav>
             <ul class="navLinks">
                 <li><a href="/userlogin" target="_blank">Author Login</a></li>
                 <li><a href="/user_signup" target="_blank">Author SignUp</a></li>
-                <li><a href="/post">Admin Login</a></li>
+                <li><a href="/adminlogin" target="_blank">Admin Login</a></li>
             </ul>
         </nav>
-        <a class="cta" href="#">Contact</a>
+
     </header>
 
-    <div class="div5">
+    <div class="main-container">
+        <div>
+            <h1>My Blog aplliaction</h1>
+        </div>
 
-        <div><h2>Tags</h2></div>
-        <hr style="color:gray;margin-bottom:10px;">
-        <a class="tagStyle" href="#" th:each="items:${tags}">
-            <span th:text="${items.name}">Artificial</span>
-        </a>
-    </div>
+        <div>
+            <form action="/">
+                <input style="padding:2px;margin:5px;border-radius:21px;width:79%" type="text" name="search"
+                       placeholder="Author,Title,Excerpt,Content" required>
+                <button name="button">Search</button>
+            </form>
 
-    <div class="div6">
-
-        <div class="card-container" th:each="items : ${post}">
-            <div class="city">
-                <a th:href="@{/viewpost?id=} + ${items.id}">
-                    <div class="city-image">
-                        <img src="http://lorempixel.com/output/city-q-g-640-480-1.jpg" alt="city">
+            <div>
+                <form action="/">
+                    <div>
+                        <select name="sort" style="padding:2px;margin:5px;width:79%">
+                            <option>Sort</option>
+                            <option value="new">New First</option>
+                            <option value="old">Old First</option>
+                        </select>
+                        <button name="button"> Sort</button>
                     </div>
-                    <div class="description">
-                        <h2 th:text="${items.title}">Title</h2>
-                        <h3 th:text="${items.excerpt}"></h3>
-                        <h4 th:text="${items.author}">Author</h4>
-                        <h5 th:text="${items.publishedAt}">Publish Date</h5>
-                    </div>
-                </a>
+                </form>
+
+                <form>
+                    <input type="text" name="author" placeholder="authors name">
+                    <input type="date" name="publishDate">
+                    <input type="submit" name="submit">
+                </form>
+
             </div>
 
         </div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="column" th:each="items : ${post}">
+            <a th:href="@{/viewpost?id=} + ${items.id}">
+                <div class="card">
+                    <h2 th:text="${items.title}">Title</h2>
+                    <h3 th:text="${items.excerpt}"></h3>
+                    <h4 th:text="${items.author}">Author</h4>
+                    <h5 th:text="${items.publishedAt}">Publish Date</h5>
+
+                </div>
+            </a>
+        </div>
+
 
     </div>
-            <di style="margin-left:115%;display:flex;justify-content:center;">
-                <a th:href="@{/?page=}"+1 style="color:black">Previous</a><span style="color:black;margin-left:5px;margin-right:5px;"> | </span>
-                <a th:href="@{/?page=}"+1 style="color:black">Next</a>
 
+    <div style="display:flex;justify-content:center;">
+        <a th:href="@{/?page=}+${page-1}" style="color:black">Previous</a><span
+            style="color:black;margin-left:5px;margin-right:5px;"> | </span>
+        <a th:href="@{/?page=}+${page+1}" style="color:black">Next</a>
+    </div>
 
-            </di>
-    <div class="div7">
-        Footer
+    <div class="footer">
+        <p> Footer</p>
     </div>
 </main>
 

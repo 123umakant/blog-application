@@ -14,6 +14,7 @@ public class AuthorService {
     @Autowired
     AuthorRepository authorRepository;
 
+
     public boolean verifyDetail(Visitor visitor) {
 
         boolean value = authorRepository.verifyDetail(visitor);
@@ -22,16 +23,22 @@ public class AuthorService {
 
 
     public void saveLoginDetail(Visitor visitor) {
-       authorRepository.saveLoginDetail(visitor);
+        authorRepository.saveLoginDetail(visitor);
     }
 
-    public List<Post> getAuthorPosts(long id){
-          return authorRepository.getAuthorPosts(id);
+    public List<Post> getAuthorPosts(long id) {
+        return authorRepository.getAuthorPosts(id);
     }
-    public long getId(String userName,String password){
 
-        List<Visitor> visitor = authorRepository.findId(userName,password);
+    public long getId(String userName, String password) {
+
+        List<Visitor> visitor = authorRepository.findId(userName, password);
 
         return visitor.get(0).getId();
+    }
+
+    public boolean verifyAdminDetail(Visitor author) {
+        String query = "select * from visitor where name='" + author.getName() + "' and password='" + author.getPassword() + "'";
+        return authorRepository.verifyAdminDetail(query);
     }
 }

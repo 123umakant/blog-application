@@ -1,7 +1,6 @@
 package com.mountblue.blogpost.repository;
 
 import com.mountblue.blogpost.model.Post;
-import com.mountblue.blogpost.model.Visitor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -20,8 +19,11 @@ public class PostRepository {
         return entityManager.merge(post);
     }
 
-    public List<Post> findAllPost() {
-        return entityManager.createQuery("SELECT e FROM Post e", Post.class).getResultList();
+    public List<Post> findAllPost(int page) {
+        return entityManager.createNativeQuery("SELECT * FROM Post orders limit 4 offset " + ((page - 1) * 4), Post.class).getResultList();
+    }
+    public List<Post> findAllPost(int page,String query) {
+        return entityManager.createNativeQuery(query, Post.class).getResultList();
     }
 
     public List<Post> findAllPostValue(long id) {
@@ -31,8 +33,22 @@ public class PostRepository {
 
 
     public void updatePostData(Post post) {
-         entityManager.createNativeQuery("update post set author='" + post.getAuthor() + "',content='"
-                + post.getContent() + "',excerpt='"+post.getExcerpt()+"',title='"+post.getTitle()+"',updated_at='"+
-                post.getUpdatedAt()+"' where id='"+post.getId()+"'").executeUpdate();
+        entityManager.createNativeQuery("update post set author='" + post.getAuthor() + "',content='"
+                + post.getContent() + "',excerpt='" + post.getExcerpt() + "',title='" + post.getTitle() + "',updated_at='" +
+                post.getUpdatedAt() + "' where id='" + post.getId() + "'").executeUpdate();
+    }
+
+    public List<Post> getDataByAuthorName(String query) {
+
+        return entityManager.createNativeQuery(query, Post.class).getResultList();
+    }
+
+    public List<Post> getDataByPublishDate(String query) {
+        return entityManager.createNativeQuery(query, Post.class).getResultList();
+    }
+
+    public List<Post> fetchSearchedPost(String query) {
+
+        return entityManager.createNativeQuery(query, Post.class).getResultList();
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,15 +38,60 @@ public class IndexPageController {
     Comment commentModal = new Comment();
 
     @GetMapping("/")
-    public String homePage(Model model) {
+    public String homePage(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "author",
+            required = false) String author, @RequestParam(value = "sort", required = false) String sort,
+                           @RequestParam(value = "publishDate", required = false) String publishDate,
+                           @RequestParam(value = "search", required = false) String search, Model model) {
 
         //postService.savePost();
         // tagsService.saveTags();
+
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (search != null) {
+            System.out.println(search);
+            model.addAttribute("post", postService.getSearchedPost(search));
+        } else if (sort != null) {
+
+            model.addAttribute("post", postService.retireAllPostValues(page, sort));
+        } else if (author != null && author != "") {
+
+            model.addAttribute("post", postService.fetchDataByAuthorName(author));
+        } else if (publishDate != null) {
+
+            model.addAttribute("post", postService.fetchDataByPublishDate(publishDate));
+        } else {
+            System.out.println("else");
+            model.addAttribute("post", postService.retireAllPostValues(page));
+        }
+
         model.addAttribute("user", userService.retireAllValues());
-        model.addAttribute("post", postService.retireAllPostValues());
         model.addAttribute("tags", tagsService.retriveTags());
+        model.addAttribute("page", page);
+
         return "index";
     }
+
+    @GetMapping("/adminlogin")
+    public String adminLogin() {
+        return "adminlogin";
+    }
+    @PostMapping("/adminlogin")
+    public String verifyAdminLogin(@RequestParam("userName") String userName ,@RequestParam("password") String password,Model model) {
+        author.setName(userName);
+        author.setPassword(password);
+
+        boolean value = authorService.verifyAdminDetail(author);
+       if(value){
+
+
+
+       }
+        return "adminPage";
+    }
+
+
 
 
     @GetMapping("/userlogin")
@@ -54,8 +100,18 @@ public class IndexPageController {
     }
 
     @GetMapping("/post")
-    public String postPage() {
-        return "post";
+    public String postPage(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+        author.setEmail(email);
+        author.setPassword(password);
+        boolean value = authorService.verifyDetail(author);
+        if (value) {
+            model.addAttribute("id", authorService.getId(email, password));
+            return "post";
+        } else {
+
+            return "user_signup";
+        }
+
     }
 
     @PostMapping("/post")
@@ -85,6 +141,8 @@ public class IndexPageController {
         author.setPassword(password);
         boolean value = authorService.verifyDetail(author);
 
+        model.addAttribute("userName", email);
+        model.addAttribute("password", password);
         if (value) {
 
             List<Post> list = authorService.getAuthorPosts(authorService.getId(email, password));
