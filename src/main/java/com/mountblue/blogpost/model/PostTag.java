@@ -3,15 +3,18 @@ package com.mountblue.blogpost.model;
 import com.sun.istack.NotNull;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
 public class PostTag {
     @Id
-    private long postId;
-    @NotNull
+    @GeneratedValue()
     private long tagId;
+
+    @NotNull
+    private long postId;
     @NotNull
     private Date createdAt;
     @NotNull

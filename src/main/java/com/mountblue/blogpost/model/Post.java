@@ -3,9 +3,7 @@ package com.mountblue.blogpost.model;
 
 import com.sun.istack.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -18,6 +16,7 @@ public class Post {
     @NotNull
     private String excerpt;
     @NotNull
+    @Column(columnDefinition="TEXT")
     private String content;
     @NotNull
     private String author;

@@ -120,6 +120,8 @@ public class IndexPageController {
                        @RequestParam("content") String content, @RequestParam("author") String author,
                        @RequestParam("id") String id) {
 
+
+        post.setId(post.getId()+1);
         post.setTitle(title);
         post.setExcerpt(excerpt);
         post.setContent(content);
@@ -211,12 +213,10 @@ public class IndexPageController {
         return "postedit";
     }
 
-    @GetMapping("edit")
+    @PostMapping("editPost")
     public String getPost(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt,
                           @RequestParam("content") String content, @RequestParam("author") String author,
-                          @RequestParam("id") long id, @RequestParam("publishedAt") String publishedAt,
-                          @RequestParam("createdAt") String createdAt, @RequestParam("isPublished") boolean isPublished
-            , @RequestParam("visitor_id") long visitor_id) throws ParseException {
+                          @RequestParam("id") long id, @RequestParam("visitor_id") long visitor_id) throws ParseException {
 
 
         post.setId(id);

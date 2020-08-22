@@ -25,7 +25,7 @@
 
 <div class="container-form">
 
-    <form action="edit" method="get">
+    <form action="editPost" method="post">
         <table>
             <thead>
             <tr>
@@ -58,7 +58,6 @@
             </tr>
             <input type="text" style="display:none" name="id" th:value="${updatValues.id}"/>
             <input type="text" style="display:none" name="visitor_id" th:value="${updatValues.visitor_id}"/>
-            <input type="text" style="display:none" name="isPublished" th:value="${updatValues.published}"/>
 
         </table>
         <input style="margin-left: 33%;" type="submit">
