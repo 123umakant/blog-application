@@ -22,7 +22,8 @@ public class PostRepository {
     public List<Post> findAllPost(int page) {
         return entityManager.createNativeQuery("SELECT * FROM Post orders limit 4 offset " + ((page - 1) * 4), Post.class).getResultList();
     }
-    public List<Post> findAllPost(int page,String query) {
+
+    public List<Post> findAllPost(int page, String query) {
         return entityManager.createNativeQuery(query, Post.class).getResultList();
     }
 
@@ -50,5 +51,10 @@ public class PostRepository {
     public List<Post> fetchSearchedPost(String query) {
 
         return entityManager.createNativeQuery(query, Post.class).getResultList();
+    }
+
+    public List<Post> getAllPost(String query) {
+        return entityManager.createNativeQuery(query, Post.class).getResultList();
+
     }
 }

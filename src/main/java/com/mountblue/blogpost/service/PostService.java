@@ -70,7 +70,12 @@ public class PostService {
 
     public List<Post> getSearchedPost(String search) {
 
-        String query = "select * from post where to_tsvector(author ||' ' || content || ' ' || excerpt || ' ' || title) @@ to_tsquery('"+search+"')";
+        String query = "select * from post where to_tsvector(author ||' ' || content || ' ' || excerpt || ' ' || title) @@ to_tsquery('" + search + "')";
         return postRepository.fetchSearchedPost(query);
+    }
+
+    public List<Post> retireAllPost() {
+        String query = "select * from post";
+        return postRepository.getAllPost(query);
     }
 }

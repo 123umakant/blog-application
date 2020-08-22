@@ -15,15 +15,17 @@ public class TagsService {
     TagsRepository tagsRepository;
 
     Tag tag = new Tag();
-    public void saveTags(){
-        Date date =new Date();
+
+    public void saveTags() {
+        Date date = new Date();
         tag.setId(1);
         tag.setName("Java");
         tag.setCreatedAt(date);
         tag.setUpdatedAt(date);
         tagsRepository.insertTags(tag);
     }
-    public List<Tag> retriveTags(){
-     return tagsRepository.retriveAllTags();
+
+    public List<Tag> retriveTags() {
+        return tagsRepository.retriveAllTags();
     }
 }

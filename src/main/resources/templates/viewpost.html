@@ -27,36 +27,50 @@
     </header>
 
 
-
     <div class="row">
 
         <div class="column" style="margin-left: 25%;" th:each="items : ${post}">
 
-                <div class="card">
-                    <h2 th:text="${items.title}">Title</h2>
-                    <h3 th:text="${items.excerpt}"></h3>
-                    <P th:text="${items.content}"></P>
-                    <h4 th:text="${items.author}">Author</h4>
-                    <h5 th:text="${items.publishedAt}">Publish Date</h5>
+            <div class="card">
+                <h2 th:text="${items.title}">Title</h2>
+                <h3 th:text="${items.excerpt}"></h3>
+                <P th:text="${items.content}"></P>
+                <h4 th:text="${items.author}">Author</h4>
+                <h5 th:text="${items.publishedAt}">Publish Date</h5>
 
-                </div>
-                <form action="saveComment" method="post">
-                    <section style="margin-top: 35px;margin-left: 37.5%;">
-                        <div>
-                            <table>
-                                <thead><tr><th>Post Your Comment</th></tr></thead>
-                                <tbody>
-                            <tr><td><input style="display:none;" type="text" name="id" th:value="${items.id}"></td></tr>
-                            <tr><td><input type="text" name="name" placeholder="Enter Your Name" required></td></tr>
-                            <tr><td><input type="email" name="email" placeholder="Enter Your Email" required></td></tr>
-                            <tr><td><textarea name="comment" placeholder="Share your thoughts ..." required></textarea><br></td></tr>
-                            <tr><td><input type="submit" name="submit button"></td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+            </div>
+            <form action="saveComment" method="post">
+                <section style="margin-top: 35px;margin-left: 37.5%;">
+                    <div>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Post Your Comment</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input style="display:none;" type="text" name="id" th:value="${items.id}"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="name" placeholder="Enter Your Name" required></td>
+                            </tr>
+                            <tr>
+                                <td><input type="email" name="email" placeholder="Enter Your Email" required></td>
+                            </tr>
+                            <tr>
+                                <td><textarea name="comment" placeholder="Share your thoughts ..."
+                                              required></textarea><br></td>
+                            </tr>
+                            <tr>
+                                <td><input type="submit" name="submit button"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    </section>
-                </form>
+                </section>
+            </form>
             <br>
 
 
@@ -102,6 +116,7 @@ $( document ).ready(function() {
 
 			});
 		});
+
 
 
 

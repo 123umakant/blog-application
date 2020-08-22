@@ -55,7 +55,7 @@ public class AuthorRepository {
 
     public boolean verifyAdminDetail(String query) {
         boolean flag = false;
-        List<Visitor> list = entityManager.createNativeQuery(query,Visitor.class).getResultList();
+        List<Visitor> list = entityManager.createNativeQuery(query, Visitor.class).getResultList();
 
         if (list.size() == 1) {
             flag = true;

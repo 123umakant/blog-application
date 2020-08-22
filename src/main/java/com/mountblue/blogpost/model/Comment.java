@@ -13,7 +13,7 @@ public class Comment {
     @Id
     @GeneratedValue
     private long id;
-   @NotNull
+    @NotNull
     private String name;
     @NotNull
     private String email;

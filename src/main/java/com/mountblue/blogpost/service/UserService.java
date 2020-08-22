@@ -27,8 +27,8 @@ public class UserService {
     }
 
 
-    public List<Visitor> retireAllValues(){
-      return  repository.findAll();
+    public List<Visitor> retireAllValues() {
+        return repository.findAll();
     }
 
 }

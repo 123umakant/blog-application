@@ -15,12 +15,12 @@ public class CommentRepository {
     @PersistenceContext
     EntityManager entityManager;
 
-   public void saveCommentData(Comment comment){
-       entityManager.merge(comment);
-   }
+    public void saveCommentData(Comment comment) {
+        entityManager.merge(comment);
+    }
 
     public List<Comment> retriveComments(String postId) {
 
-      return entityManager.createNativeQuery("select * from Comment where post_id="+Long.parseLong(postId)).getResultList();
+        return entityManager.createNativeQuery("select * from Comment where post_id=" + Long.parseLong(postId)).getResultList();
     }
 }

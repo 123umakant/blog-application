@@ -50,7 +50,7 @@ public class IndexPageController {
             page = 1;
         }
         if (search != null) {
-            System.out.println(search);
+
             model.addAttribute("post", postService.getSearchedPost(search));
         } else if (sort != null) {
 
@@ -62,7 +62,7 @@ public class IndexPageController {
 
             model.addAttribute("post", postService.fetchDataByPublishDate(publishDate));
         } else {
-            System.out.println("else");
+
             model.addAttribute("post", postService.retireAllPostValues(page));
         }
 
@@ -77,21 +77,22 @@ public class IndexPageController {
     public String adminLogin() {
         return "adminlogin";
     }
+
     @PostMapping("/adminlogin")
-    public String verifyAdminLogin(@RequestParam("userName") String userName ,@RequestParam("password") String password,Model model) {
+    public String verifyAdminLogin(@RequestParam("userName") String userName, @RequestParam("password") String password, Model model) {
         author.setName(userName);
         author.setPassword(password);
 
         boolean value = authorService.verifyAdminDetail(author);
-       if(value){
+        if (value) {
+            model.addAttribute("post", postService.retireAllPost());
 
+            return "adminPage";
+        } else {
+            return "adminlogin";
+        }
 
-
-       }
-        return "adminPage";
     }
-
-
 
 
     @GetMapping("/userlogin")

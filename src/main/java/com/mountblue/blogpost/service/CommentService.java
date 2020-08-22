@@ -25,16 +25,16 @@ public class CommentService {
     }
 
     public String retriveComments(String postId) {
-       String comment=null;
-        List<Comment> list= commentRepository.retriveComments(postId);
+        String comment = null;
+        List<Comment> list = commentRepository.retriveComments(postId);
 
         Iterator itr = list.iterator();
-        while(itr.hasNext()){
+        while (itr.hasNext()) {
             Object[] obj = (Object[]) itr.next();
             //now you have one array of Object for each row
-             comment +=","+ String.valueOf(obj[1]); // don't know the type of column CLIENT assuming String
+            comment += "," + String.valueOf(obj[1]); // don't know the type of column CLIENT assuming String
 
         }
-       return comment;
+        return comment;
     }
 }
