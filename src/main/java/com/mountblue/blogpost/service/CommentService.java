@@ -37,4 +37,11 @@ public class CommentService {
         }
         return comment;
     }
+
+
+    public void deleteComments(String postId) {
+        long id =Long.parseLong(postId);
+        String query ="delete from Comment where post_id="+postId;
+        commentRepository.deleteCommentData(query);
+    }
 }

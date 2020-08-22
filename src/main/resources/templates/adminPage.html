@@ -24,7 +24,7 @@
             <ul class="navLinks">
                 <li><a href="/userlogin" target="_blank">Author Login</a></li>
                 <li><a href="/user_signup" target="_blank">Author SignUp</a></li>
-                <li><a href="/post">Admin Login</a></li>
+
             </ul>
         </nav>
 
@@ -33,16 +33,6 @@
     <div class="main-container">
         <div>
             <h1>Admin Page</h1>
-        </div>
-
-        <div>
-            <form action="/adminlogin" method="post">
-                <input type="hidden" name="email" th:value="${userName}">
-                <input type="hidden" name="password" th:value="${password}">
-                <input type="hidden" name="page" value="1">
-                <button style="height: 25px; width: 50%;">Add New Post</button>
-
-            </form>
         </div>
     </div>
 
@@ -70,8 +60,11 @@
                     <input type="text" style="display:none" name="isPublished" th:value="${items.published}">
                     <input type="text" style="display:none" name="visitor_id" th:value="${items.visitor_id}">
                     <button style="padding:4px 30px;margin:5px;">Edit</button>
-                    <button style="padding:4px 30px;margin:5px;">Delete Post</button>
 
+                </form>
+                <form action="/deletePost">
+                    <input type="text" style="display:none" name="postId" th:value="${items.id}">
+                    <button style="padding:4px 30px;margin:5px;">Delete Post</button>
                 </form>
             </div>
 

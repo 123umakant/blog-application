@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -56,5 +57,9 @@ public class PostRepository {
     public List<Post> getAllPost(String query) {
         return entityManager.createNativeQuery(query, Post.class).getResultList();
 
+    }
+
+    public void   deletePostData(String query) {
+        entityManager.createNativeQuery(query,Post.class).executeUpdate();
     }
 }

@@ -78,4 +78,10 @@ public class PostService {
         String query = "select * from post";
         return postRepository.getAllPost(query);
     }
+
+    public void deletePost(String postId) {
+        long id =Long.parseLong(postId);
+        String query ="delete from post where id="+id;
+        postRepository.deletePostData(query);
+    }
 }

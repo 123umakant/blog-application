@@ -23,4 +23,8 @@ public class CommentRepository {
 
         return entityManager.createNativeQuery("select * from Comment where post_id=" + Long.parseLong(postId)).getResultList();
     }
+
+    public void deleteCommentData(String query) {
+        System.out.println(entityManager.createNativeQuery(query,Comment.class).executeUpdate());
+    }
 }

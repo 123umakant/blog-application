@@ -250,4 +250,15 @@ public class IndexPageController {
     public String getComment(@RequestParam("postId") String postId) {
         return commentService.retriveComments(postId);
     }
+
+    @GetMapping("deletePost")
+    public String getpostId(@RequestParam("postId") String postId) {
+
+         postService.deletePost(postId);
+         commentService.deleteComments(postId);
+        return "adminPage";
+    }
+
 }
+
+
