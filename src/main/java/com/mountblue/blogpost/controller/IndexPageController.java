@@ -121,7 +121,7 @@ public class IndexPageController {
                        @RequestParam("id") String id) {
 
 
-        post.setId(post.getId()+1);
+        post.setId(post.getId() + 1);
         post.setTitle(title);
         post.setExcerpt(excerpt);
         post.setContent(content);
@@ -254,8 +254,8 @@ public class IndexPageController {
     @GetMapping("deletePost")
     public String getpostId(@RequestParam("postId") String postId) {
 
-         postService.deletePost(postId);
-         commentService.deleteComments(postId);
+        postService.deletePost(postId);
+        commentService.deleteComments(postId);
         return "adminPage";
     }
 
