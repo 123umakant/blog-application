@@ -41,6 +41,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     //for custom login page
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
                 .csrf().disable()
                 .authorizeRequests().antMatchers("/adminlogin").permitAll()
@@ -49,8 +50,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/lohout"))
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/").permitAll();
-        /*.loginPage("/adminlogin").permitAll()*/
+               /*.loginPage("/adminlogin").permitAll()*/
     }
 }
