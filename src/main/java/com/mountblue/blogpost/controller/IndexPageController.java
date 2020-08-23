@@ -1,9 +1,7 @@
 package com.mountblue.blogpost.controller;
 
 
-import com.mountblue.blogpost.model.Comment;
-import com.mountblue.blogpost.model.Post;
-import com.mountblue.blogpost.model.Visitor;
+import com.mountblue.blogpost.model.*;
 import com.mountblue.blogpost.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -117,8 +115,9 @@ public class IndexPageController {
 
     @PostMapping("/post")
     public String post(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt,
-                       @RequestParam("content") String content, @RequestParam("author") String author,
+                       @RequestParam("content") String content, @RequestParam("author") String author, @RequestParam("tags") String tags,
                        @RequestParam("id") String id) {
+
 
 
         post.setId(post.getId() + 1);
@@ -128,6 +127,8 @@ public class IndexPageController {
         post.setAuthor(author);
         post.setVisitor_id(Long.parseLong(id));
         postService.savePost(post);
+
+        tagsService.saveTags(tags, postService.getId());
 
         return "myblogs";
     }

@@ -4,8 +4,8 @@ import com.mountblue.blogpost.model.Post;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -61,5 +61,11 @@ public class PostRepository {
 
     public void   deletePostData(String query) {
         entityManager.createNativeQuery(query,Post.class).executeUpdate();
+    }
+
+
+    public List<Object> getId() {
+        return  entityManager.createNativeQuery("SELECT * FROM post ORDER BY id DESC LIMIT 1").getResultList();
+
     }
 }

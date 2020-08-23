@@ -5,7 +5,9 @@ import com.mountblue.blogpost.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -83,5 +85,20 @@ public class PostService {
         long id =Long.parseLong(postId);
         String query ="delete from post where id="+id;
         postRepository.deletePostData(query);
+    }
+
+    public long getId() {
+        long id = 0;
+       List<Object> postId = postRepository.getId();
+        Iterator itr = postId.iterator();
+        while(itr.hasNext()){
+            Object[] obj = (Object[]) itr.next();
+            BigInteger intId = (BigInteger) obj[0];
+
+                  id = intId.longValue();
+            System.out.println(id);
+        }
+
+              return id;
     }
 }
