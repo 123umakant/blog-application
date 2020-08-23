@@ -259,6 +259,11 @@ public class IndexPageController {
         commentService.deleteComments(postId);
         return "adminPage";
     }
+    @GetMapping("logout")
+    public String logout() {
+        return "redirect:/";
+    }
+
 
 }
 
