@@ -43,17 +43,14 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests().antMatchers("/userlogin").permitAll()
+                .authorizeRequests().antMatchers("/adminlogin").permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/userlogin").permitAll()
                 .and()
                 .logout().invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/lohout"))
                 .logoutSuccessUrl("/").permitAll();
-
-
-
+        /*.loginPage("/adminlogin").permitAll()*/
     }
 }
