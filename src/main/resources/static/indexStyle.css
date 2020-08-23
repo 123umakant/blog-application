@@ -1,3 +1,8 @@
+/*spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
+  spring.datasource.username=postgres
+  spring.datasource.password=root
+  logging.level.org.springframework.context=DEBUG*/
+
 *{
 margin: 0; padding: 0;
 box-sizing: border-box; text-align: center;
