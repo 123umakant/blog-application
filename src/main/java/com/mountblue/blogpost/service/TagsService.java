@@ -26,15 +26,14 @@ public class TagsService {
     public void saveTags(String tags, Long postId) {
         String[] stringArray = tags.split(",");
 
-
         for (String tagValue : stringArray) {
+            long id = 0;
+
             Tag tag = new Tag();
             PostTag postTag = new PostTag();
-
             tag.setName(tagValue);
             tag.setCreatedAt(new Date());
             tag.setUpdatedAt(new Date());
-            long id = 0;
             tagsRepository.saveTagsData(tag);
             List<Object> tagId = tagsRepository.getId();
 
@@ -42,20 +41,15 @@ public class TagsService {
             while (itr.hasNext()) {
                 Object[] obj = (Object[]) itr.next();
                 BigInteger intId = (BigInteger) obj[0];
-
                 id = intId.longValue();
-
             }
 
             postTag.setPostId(postId);
             postTag.setTagId(id);
             postTag.setCreatedAt(new Date());
             postTag.setUpdatedAt(new Date());
-
             postTagRepository.savePostTag(postTag);
-
         }
-
     }
 
     public String retriveTags(String postId) {
@@ -65,15 +59,14 @@ public class TagsService {
         Iterator<PostTag> itr = postTags.iterator();
         while (itr.hasNext()) {
             PostTag object = itr.next();
+
             String queryTag = "select * from tag where id=" + object.getTagId();
             List<Tag> tags = tagsRepository.getTags(queryTag);
             Iterator<Tag> itrTag = tags.iterator();
+
             while (itrTag.hasNext()) {
                 Tag tag = itrTag.next();
-
                 tagsStr += "," + tag.getName();
-
-
             }
         }
         return tagsStr;

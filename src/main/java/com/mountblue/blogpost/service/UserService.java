@@ -1,12 +1,10 @@
 package com.mountblue.blogpost.service;
 
-import com.mountblue.blogpost.model.Post;
 import com.mountblue.blogpost.model.Visitor;
+import com.mountblue.blogpost.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.mountblue.blogpost.repository.UserRepository;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,19 +14,15 @@ public class UserService {
 
     Visitor visitor = new Visitor();
 
-
     public void saveUserdetail() {
         visitor.setId(1L);
         visitor.setName("umakant");
         visitor.setEmail("umakant.un@gmail.com");
         visitor.setPassword("root");
-
         System.out.println(repository.insert(visitor));
     }
-
 
     public List<Visitor> retireAllValues() {
         return repository.findAll();
     }
-
 }

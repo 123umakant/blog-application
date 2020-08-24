@@ -52,6 +52,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/").permitAll();
-               /*.loginPage("/adminlogin").permitAll()*/
+        /*.loginPage("/adminlogin").permitAll()*/
     }
 }

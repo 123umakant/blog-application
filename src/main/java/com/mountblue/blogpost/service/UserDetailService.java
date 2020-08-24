@@ -3,7 +3,6 @@ package com.mountblue.blogpost.service;
 import com.mountblue.blogpost.UserPrincipal;
 import com.mountblue.blogpost.model.Visitor;
 import com.mountblue.blogpost.repository.UserDetailRepository;
-import com.mountblue.blogpost.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

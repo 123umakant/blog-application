@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
-   private Visitor visitor;
+    private Visitor visitor;
 
     public UserPrincipal(Visitor visitor) {
         this.visitor = visitor;

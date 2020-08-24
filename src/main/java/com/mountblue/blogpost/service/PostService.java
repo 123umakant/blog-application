@@ -13,13 +13,15 @@ import java.util.List;
 @Service
 public class PostService {
 
+    private final int LIMIT = 4;
+    private final int OFFSET = 4;
+
     @Autowired
     PostRepository postRepository;
 
     @Autowired
     AuthorService authorService;
     Post post = new Post();
-
 
     public void savePost(Post post) {
         Date date = new Date();
@@ -38,13 +40,13 @@ public class PostService {
     public List<Post> retireAllPostValues(int page, String sort) {
         String query = "";
         if (sort == "new") {
-            query = "select * from post published_at order by published_at asc limit 4 offset " + ((page - 1) * 4);
+            query = "select * from post published_at order by published_at asc limit " +
+                    LIMIT + " offset " + ((page - 1) * OFFSET);
         } else {
-            query = "select * from post published_at order by published_at desc limit 4 offset " + ((page - 1) * 4);
+            query = "select * from post published_at order by published_at desc limit "
+                    + LIMIT + " offset " + ((page - 1) * OFFSET);
         }
         return postRepository.findAllPost(page, query);
-
-
     }
 
     public List<Post> retirePostValues(String id) {
@@ -58,21 +60,19 @@ public class PostService {
     public List<Post> fetchDataByAuthorName(String author) {
 
         String query = "select * from post where author='" + author + "'";
-
         return postRepository.getDataByAuthorName(query);
     }
 
     public List<Post> fetchDataByPublishDate(String publishDate) {
 
         String query = "select * from post where CAST(published_at as DATE)='" + publishDate + "'";
-
         return postRepository.getDataByPublishDate(query);
-
     }
 
     public List<Post> getSearchedPost(String search) {
 
-        String query = "select * from post where to_tsvector(author ||' ' || content || ' ' || excerpt || ' ' || title) @@ to_tsquery('" + search + "')";
+        String query = "select * from post where " +
+                "to_tsvector(author ||' ' || content || ' ' || excerpt || ' ' || title) @@ to_tsquery('" + search + "')";
         return postRepository.fetchSearchedPost(query);
     }
 
@@ -82,23 +82,20 @@ public class PostService {
     }
 
     public void deletePost(String postId) {
-        long id =Long.parseLong(postId);
-        String query ="delete from post where id="+id;
+        long id = Long.parseLong(postId);
+        String query = "delete from post where id=" + id;
         postRepository.deletePostData(query);
     }
 
     public long getId() {
         long id = 0;
-       List<Object> postId = postRepository.getId();
+        List<Object> postId = postRepository.getId();
         Iterator itr = postId.iterator();
-        while(itr.hasNext()){
+        while (itr.hasNext()) {
             Object[] obj = (Object[]) itr.next();
             BigInteger intId = (BigInteger) obj[0];
-
-                  id = intId.longValue();
-            System.out.println(id);
+            id = intId.longValue();
         }
-
-              return id;
+        return id;
     }
 }

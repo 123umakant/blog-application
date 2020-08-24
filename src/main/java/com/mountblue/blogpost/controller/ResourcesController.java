@@ -1,12 +1,17 @@
 package com.mountblue.blogpost.controller;
 
 
-import com.mountblue.blogpost.model.*;
+import com.mountblue.blogpost.model.Comment;
+import com.mountblue.blogpost.model.Post;
+import com.mountblue.blogpost.model.Visitor;
 import com.mountblue.blogpost.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,6 +20,9 @@ import java.util.List;
 
 @Controller
 public class ResourcesController {
+
+    private final int POST_INDEX=0;
+    private final int INCREMENT_VALUE_BY_ONE=1;
 
     @Autowired
     UserService userService;
@@ -40,6 +48,7 @@ public class ResourcesController {
             required = false) String author, @RequestParam(value = "sort", required = false) String sort,
                            @RequestParam(value = "publishDate", required = false) String publishDate,
                            @RequestParam(value = "search", required = false) String search, Model model) {
+
 
         if (page == null || page < 1) {
             page = 1;
@@ -73,7 +82,10 @@ public class ResourcesController {
     }
 
     @PostMapping("/adminlogin")
-    public String verifyAdminLogin(@RequestParam("userName") String userName, @RequestParam("password") String password, Model model) {
+    public String verifyAdminLogin(@RequestParam("userName") String userName,
+                                   @RequestParam("password") String password, Model model) {
+
+
         author.setName(userName);
         author.setPassword(password);
 
@@ -111,12 +123,12 @@ public class ResourcesController {
 
     @PostMapping("/post")
     public String post(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt,
-                       @RequestParam("content") String content, @RequestParam("author") String author, @RequestParam("tags") String tags,
+                       @RequestParam("content") String content, @RequestParam("author") String author,
+                       @RequestParam("tags") String tags,
                        @RequestParam("id") String id) {
 
 
-
-        post.setId(post.getId() + 1);
+        post.setId(post.getId() + INCREMENT_VALUE_BY_ONE);
         post.setTitle(title);
         post.setExcerpt(excerpt);
         post.setContent(content);
@@ -129,11 +141,7 @@ public class ResourcesController {
         return "myblogs";
     }
 
-    @PostMapping
-    public String postSubmit() {
 
-        return "";
-    }
 
     @PostMapping("/userlogin")
     public String logiDetail(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
@@ -146,7 +154,7 @@ public class ResourcesController {
         if (value) {
 
             List<Post> list = authorService.getAuthorPosts(authorService.getId(email, password));
-            if (list.size() == 0) {
+            if (list.size() == POST_INDEX) {
                 model.addAttribute("id", authorService.getId(email, password));
                 return "post";
             } else {
@@ -247,6 +255,7 @@ public class ResourcesController {
     public String getComment(@RequestParam("postId") String postId) {
         return commentService.retriveComments(postId);
     }
+
     @ResponseBody
     @GetMapping("getTags")
     public String getTags(@RequestParam("postId") String postId) {
@@ -260,12 +269,11 @@ public class ResourcesController {
         commentService.deleteComments(postId);
         return "adminPage";
     }
+
     @GetMapping("logout")
     public String logout() {
         return "redirect:/";
     }
-
-
 }
 
 

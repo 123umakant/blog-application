@@ -11,17 +11,14 @@ import java.util.List;
 
 @Service
 public class CommentService {
-
+        private final int COMMENT_INDEX=1;
     @Autowired
     CommentRepository commentRepository;
 
     public void saveComment(Comment commentModal) {
-
         commentModal.setCreatedAt(new Date());
         commentModal.setUpdatedAt(new Date());
-
         commentRepository.saveCommentData(commentModal);
-
     }
 
     public String retriveComments(String postId) {
@@ -29,19 +26,17 @@ public class CommentService {
         List<Comment> list = commentRepository.retriveComments(postId);
 
         Iterator itr = list.iterator();
+
         while (itr.hasNext()) {
             Object[] obj = (Object[]) itr.next();
-            //now you have one array of Object for each row
-            comment += "," + String.valueOf(obj[1]); // don't know the type of column CLIENT assuming String
-
+            comment += "," + String.valueOf(obj[COMMENT_INDEX]);
         }
         return comment;
     }
 
-
     public void deleteComments(String postId) {
-        long id =Long.parseLong(postId);
-        String query ="delete from Comment where post_id="+postId;
+        long id = Long.parseLong(postId);
+        String query = "delete from Comment where post_id=" + postId;
         commentRepository.deleteCommentData(query);
     }
 }
