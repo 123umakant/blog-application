@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="https://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>User Login Portal</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         input{
         padding:5px;
@@ -17,13 +18,16 @@
 
     }
 
+
     </style>
 </head>
 <body>
 
 <div class="container-form">
+    <input type="text" th:value="${email}" name="email" id="email" style="display:none">
+    <input type="text" th:value="${password}" name="password" id="password" style="display:none">
 
-    <form action="userlogin" method="post">
+    <form action="userlogin" method="post" id="formId">
         <table>
             <thead>
             <tr>
@@ -34,17 +38,25 @@
             </thead>
             <tr>
                 <td><label>Enter Your Email : </label></td>
-                <td><input type="email" name="email" placeholder="Enter Your Email Address" required><br></td>
+                <td><input type="email" name="email" th:value="${email}" placeholder="Enter Your Email Address" required><br></td>
             </tr>
             <tr>
                 <td><label>Enter Your Password : </label></td>
-                <td><input type="password" name="password" placeholder="Enter Your Password" required><br></td>
+                <td><input type="password" name="password" th:value="${password}" placeholder="Enter Your Password" required><br></td>
             </tr>
 
         </table>
         <input style="margin-left: 33%;" type="submit">
     </form>
 </div>
-
+<script>
+$(window).on('load', function(){
+        var email = $("#email").val();
+        var password = $("#password").val();
+        if(email !=''){
+         $("#formId").submit();
+        }
+});
+</script>
 </body>
 </html>

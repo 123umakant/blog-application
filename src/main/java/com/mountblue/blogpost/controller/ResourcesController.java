@@ -6,6 +6,7 @@ import com.mountblue.blogpost.model.Post;
 import com.mountblue.blogpost.model.Visitor;
 import com.mountblue.blogpost.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,8 +24,8 @@ import java.util.List;
 @Controller
 public class ResourcesController {
 
-    private final int POST_INDEX=0;
-    private final int INCREMENT_VALUE_BY_ONE=1;
+    private final int POST_INDEX = 0;
+    private final int INCREMENT_VALUE_BY_ONE = 1;
 
     @Autowired
     UserService userService;
@@ -48,7 +51,6 @@ public class ResourcesController {
             required = false) String author, @RequestParam(value = "sort", required = false) String sort,
                            @RequestParam(value = "publishDate", required = false) String publishDate,
                            @RequestParam(value = "search", required = false) String search, Model model) {
-
 
         if (page == null || page < 1) {
             page = 1;
@@ -85,14 +87,12 @@ public class ResourcesController {
     public String verifyAdminLogin(@RequestParam("userName") String userName,
                                    @RequestParam("password") String password, Model model) {
 
-
         author.setName(userName);
         author.setPassword(password);
 
         boolean value = authorService.verifyAdminDetail(author);
         if (value) {
             model.addAttribute("post", postService.retireAllPost());
-
             return "adminPage";
         } else {
             return "adminlogin";
@@ -100,51 +100,26 @@ public class ResourcesController {
 
     }
 
-
     @GetMapping("/userlogin")
-    public String userLogin() {
+    public String userLogin(HttpSession session, Model model) {
+
+        String email = (String) session.getAttribute("email");
+        String password = (String) session.getAttribute("password");
+       model.addAttribute("email",email);
+       model.addAttribute("password",password);
         return "userlogin";
     }
 
-    @GetMapping("/post")
-    public String postPage(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
-        author.setEmail(email);
-        author.setPassword(password);
-        boolean value = authorService.verifyDetail(author);
-        if (value) {
-            model.addAttribute("id", authorService.getId(email, password));
-            return "post";
-        } else {
+    @PostMapping("/userlogin")
+    public String logiDetail(@RequestParam("email") String email, @RequestParam("password") String password, Model model
+            , HttpServletRequest request) {
 
-            return "user_signup";
+        String emailSession = (String) request.getSession().getAttribute("email");
+        if (emailSession == null) {
+            request.getSession().setAttribute("email", email);
+            request.getSession().setAttribute("password", password);
         }
 
-    }
-
-    @PostMapping("/post")
-    public String post(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt,
-                       @RequestParam("content") String content, @RequestParam("author") String author,
-                       @RequestParam("tags") String tags,
-                       @RequestParam("id") String id) {
-
-
-        post.setId(post.getId() + INCREMENT_VALUE_BY_ONE);
-        post.setTitle(title);
-        post.setExcerpt(excerpt);
-        post.setContent(content);
-        post.setAuthor(author);
-        post.setVisitor_id(Long.parseLong(id));
-        postService.savePost(post);
-
-        tagsService.saveTags(tags, postService.getId());
-
-        return "myblogs";
-    }
-
-
-
-    @PostMapping("/userlogin")
-    public String logiDetail(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
         author.setEmail(email);
         author.setPassword(password);
         boolean value = authorService.verifyDetail(author);
@@ -166,6 +141,40 @@ public class ResourcesController {
             return "user_signup";
         }
 
+    }
+
+
+    @GetMapping("/post")
+    public String postPage(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+        author.setEmail(email);
+        author.setPassword(password);
+        boolean value = authorService.verifyDetail(author);
+        if (value) {
+            model.addAttribute("id", authorService.getId(email, password));
+
+            return "post";
+        } else {
+
+            return "user_signup";
+        }
+
+    }
+
+    @PostMapping("/post")
+    public String post(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt,
+                       @RequestParam("content") String content, @RequestParam("author") String author,
+                       @RequestParam("tags") String tags,
+                       @RequestParam("id") String id) {
+
+        post.setId(post.getId() + INCREMENT_VALUE_BY_ONE);
+        post.setTitle(title);
+        post.setExcerpt(excerpt);
+        post.setContent(content);
+        post.setAuthor(author);
+        post.setVisitor_id(Long.parseLong(id));
+        postService.savePost(post);
+        tagsService.saveTags(tags, postService.getId());
+        return "myblogs";
     }
 
     @GetMapping("/user_signup")
@@ -222,8 +231,6 @@ public class ResourcesController {
     public String getPost(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt,
                           @RequestParam("content") String content, @RequestParam("author") String author,
                           @RequestParam("id") long id, @RequestParam("visitor_id") long visitor_id) throws ParseException {
-
-
         post.setId(id);
         post.setTitle(title);
         post.setExcerpt(excerpt);

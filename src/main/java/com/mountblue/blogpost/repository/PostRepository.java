@@ -37,7 +37,7 @@ public class PostRepository {
     public void updatePostData(Post post) {
         entityManager.createNativeQuery("update post set author='" + post.getAuthor() + "',content='"
                 + post.getContent() + "',excerpt='" + post.getExcerpt() + "',title='" + post.getTitle() + "',updated_at='" +
-                post.getUpdatedAt() + "' where id='" + post.getId() + "'").executeUpdate();
+                post.getUpdatedAt() + "' where id=" + post.getId()).executeUpdate();
     }
 
     public List<Post> getDataByAuthorName(String query) {
