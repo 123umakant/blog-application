@@ -79,13 +79,24 @@ public class ResourcesController {
     }
 
     @GetMapping("/adminlogin")
-    public String adminLogin() {
+    public String adminLogin(HttpSession session, Model model) {
+        String userName = (String) session.getAttribute("userName");
+        String password = (String) session.getAttribute("password");
+        model.addAttribute("userName",userName);
+        model.addAttribute("password",password);
         return "adminlogin";
     }
 
     @PostMapping("/adminlogin")
     public String verifyAdminLogin(@RequestParam("userName") String userName,
-                                   @RequestParam("password") String password, Model model) {
+                                   @RequestParam("password") String password, Model model,HttpServletRequest request) {
+
+        String userNameSession = (String) request.getSession().getAttribute("userName");
+        if (userNameSession == null) {
+            request.getSession().setAttribute("userName", userName);
+            request.getSession().setAttribute("password", password);
+        }
+
 
         author.setName(userName);
         author.setPassword(password);
@@ -278,7 +289,8 @@ public class ResourcesController {
     }
 
     @GetMapping("logout")
-    public String logout() {
+    public String logout(HttpServletRequest request) {
+        request.getSession().invalidate();
         return "redirect:/";
     }
 }
