@@ -5,6 +5,7 @@ import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Post {
@@ -30,6 +31,7 @@ public class Post {
     private Date updatedAt;
     @NotNull
     private long visitor_id;
+
 
     public long getVisitor_id() {
         return visitor_id;

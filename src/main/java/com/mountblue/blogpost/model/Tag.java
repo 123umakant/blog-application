@@ -18,6 +18,7 @@ public class Tag {
     @NotNull
     private Date updatedAt;
 
+
     public long getId() {
         return id;
     }

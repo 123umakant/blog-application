@@ -4,13 +4,17 @@ import com.sun.istack.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
 public class PostTag {
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long timestamp;
+
+    @NotNull
     private long tagId;
 
     @NotNull
@@ -19,6 +23,14 @@ public class PostTag {
     private Date createdAt;
     @NotNull
     private Date updatedAt;
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public long getPostId() {
         return postId;

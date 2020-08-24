@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
-public class IndexPageController {
+public class ResourcesController {
 
     @Autowired
     UserService userService;
@@ -41,9 +41,6 @@ public class IndexPageController {
                            @RequestParam(value = "publishDate", required = false) String publishDate,
                            @RequestParam(value = "search", required = false) String search, Model model) {
 
-        //postService.savePost();
-        // tagsService.saveTags();
-
         if (page == null || page < 1) {
             page = 1;
         }
@@ -65,7 +62,6 @@ public class IndexPageController {
         }
 
         model.addAttribute("user", userService.retireAllValues());
-        model.addAttribute("tags", tagsService.retriveTags());
         model.addAttribute("page", page);
 
         return "index";
@@ -250,6 +246,11 @@ public class IndexPageController {
     @GetMapping("getComment")
     public String getComment(@RequestParam("postId") String postId) {
         return commentService.retriveComments(postId);
+    }
+    @ResponseBody
+    @GetMapping("getTags")
+    public String getTags(@RequestParam("postId") String postId) {
+        return tagsService.retriveTags(postId);
     }
 
     @GetMapping("deletePost")
