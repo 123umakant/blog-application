@@ -254,6 +254,12 @@ public class ResourcesController {
 
         return "myblogs";
     }
+    @PostMapping("deletePost")
+    public String deletePost(@RequestParam("id") String id){
+            postService.deletePost(id);
+
+        return "redirect:userlogin";
+    }
 
     @PostMapping("saveComment")
     public String getComment(@RequestParam("id") String id, @RequestParam("comment") String comment,

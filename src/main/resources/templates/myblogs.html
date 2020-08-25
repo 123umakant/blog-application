@@ -69,6 +69,11 @@
                     <button style="padding:4px 30px;margin:5px;">Edit</button>
 
                 </form>
+                <form action="deletePost" method="post">
+                    <input type="text" style="display:none" name="id" th:value="${items.id}">
+                    <button style="padding:4px 30px;margin:5px;">Delete Post</button>
+
+                </form>
             </div>
 
         </div>
