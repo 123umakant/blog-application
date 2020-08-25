@@ -6,7 +6,6 @@ import com.mountblue.blogpost.model.Post;
 import com.mountblue.blogpost.model.Visitor;
 import com.mountblue.blogpost.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,14 +81,14 @@ public class ResourcesController {
     public String adminLogin(HttpSession session, Model model) {
         String userName = (String) session.getAttribute("userName");
         String password = (String) session.getAttribute("password");
-        model.addAttribute("userName",userName);
-        model.addAttribute("password",password);
+        model.addAttribute("userName", userName);
+        model.addAttribute("password", password);
         return "adminlogin";
     }
 
     @PostMapping("/adminlogin")
     public String verifyAdminLogin(@RequestParam("userName") String userName,
-                                   @RequestParam("password") String password, Model model,HttpServletRequest request) {
+                                   @RequestParam("password") String password, Model model, HttpServletRequest request) {
 
         String userNameSession = (String) request.getSession().getAttribute("userName");
         if (userNameSession == null) {
@@ -116,8 +115,8 @@ public class ResourcesController {
 
         String email = (String) session.getAttribute("email");
         String password = (String) session.getAttribute("password");
-       model.addAttribute("email",email);
-       model.addAttribute("password",password);
+        model.addAttribute("email", email);
+        model.addAttribute("password", password);
         return "userlogin";
     }
 
@@ -272,6 +271,37 @@ public class ResourcesController {
     @GetMapping("getComment")
     public String getComment(@RequestParam("postId") String postId) {
         return commentService.retriveComments(postId);
+    }
+
+
+    @GetMapping("editcomment")
+    public String editComment(@RequestParam("postId") String postId, @RequestParam("commentId") String commentId, Model model) {
+        model.addAttribute("comment", commentService.editComments(postId, commentId));
+        return "editComment";
+    }
+
+    @PostMapping("update_comment")
+    public String updateComment(@RequestParam("name") String name, @RequestParam("email") String email,
+                                @RequestParam("commentId") String commentId, @RequestParam("comment") String comment,
+                                @RequestParam("postId") String posId) {
+        Comment postComment = new Comment();
+        Date createdAt = commentService.findComment(commentId);
+        postComment.setComment(comment);
+        postComment.setId(Long.parseLong(commentId));
+        postComment.setName(name);
+        postComment.setEmail(email);
+        postComment.setPostId(Long.parseLong(posId));
+        postComment.setCreatedAt(createdAt);
+        postComment.setUpdatedAt(new Date());
+        commentService.updateComment(postComment);
+        return "redirect:/";
+    }
+
+    @ResponseBody
+    @GetMapping("deleteComment")
+    public String deleteComment(@RequestParam("postId") String postId) {
+        commentService.deleteComments(postId);
+        return "successful";
     }
 
     @ResponseBody

@@ -17,6 +17,10 @@
     box-sizing: content-box;
 }
 
+
+
+
+
     </style>
 </head>
 <body>
@@ -87,8 +91,7 @@
                 <input style="display:none" type="text" id="postId" th:value="${items.id}">
 
                 <div>
-                    <ol style="list-style-type: none;">
-                    </ol>
+                    <ol style="list-style-type: none;"></ol>
                 </div>
 
             </form>
@@ -112,15 +115,16 @@ $( document ).ready(function() {
 				},
 				success : function(data) {
                           console.log(data);
-                         var res = data.split(",");
+                         var res = data.split("&");
+                         var comment = res[0].split(",");
+                         var commentId = res[1].split(",");
 
-                        for(var i=res.length;i>0;i--){
-                                  if(res[i] === 'null' || res[i] ==="" || res[i] ===undefined)
+
+                        for(var i=comment.length;i>0;i--){
+                                  if(comment[i] === 'null' || comment[i] ==="" || comment[i] ===undefined)
                                         continue;
-
-                               $("ol").append("<li>"+res[i]+"</li>");
+                               $("ol").append("<li>"+comment[i]+"</li><form action='editcomment'><input type='hidden' name='postId' value='"+id+"'><input type='hidden' name='commentId' value='"+commentId[i]+"'><button style='margin:5px;'>Edit</button></form><button onclick='deleteComment("+id+")'>Delete</button>");
                         }
-
 				}
 
 			});
@@ -132,7 +136,7 @@ $( document ).ready(function() {
 					"postId" : id
 				},
 				success : function(data) {
-                          console.log(data);
+
                          var res = data.split(",");
 
                         for(var i=res.length;i>0;i--){
@@ -147,6 +151,24 @@ $( document ).ready(function() {
 			});
 
 		});
+
+function deleteComment(id){
+            event.preventDefault();
+                $.ajax({
+				url : "deleteComment",
+				type : "get",
+				data : {
+					"postId" : id
+				},
+				success : function(data) {
+                    location.reload();
+				}
+
+			});
+}
+
+
+
 </script>
 
 
