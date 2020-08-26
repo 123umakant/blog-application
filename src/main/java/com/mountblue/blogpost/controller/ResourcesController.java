@@ -46,25 +46,27 @@ public class ResourcesController {
     Comment commentModal = new Comment();
 
     @GetMapping("/")
-    public String homePage(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "author",
-            required = false) String author, @RequestParam(value = "sort", required = false) String sort,
+    public String homePage(@RequestParam(value = "page", required = false) Integer page, @RequestParam
+            (value = "sort", required = false) String sort,
                            @RequestParam(value = "publishDate", required = false) String publishDate,
                            @RequestParam(value = "search", required = false) String search, Model model) {
 
         if (page == null || page < 1) {
             page = 1;
         }
-        if (search != null) {
-
+        if(search != null && search !="" && sort != null && !sort.equals("Sort") && publishDate != null) {
+            System.out.println("inside all search");
+            model.addAttribute("post", postService.getSearchedPostAll(page, search, sort, publishDate));
+        }
+        if (search != null && search !="") {
+            System.out.println("inside search");
             model.addAttribute("post", postService.getSearchedPost(search));
-        } else if (sort != null) {
-
+        } else if (sort != null && !sort.equals("Sort")) {
+            System.out.println(sort);
+            System.out.println("inside sort");
             model.addAttribute("post", postService.retireAllPostValues(page, sort));
-        } else if (author != null && author != "") {
-
-            model.addAttribute("post", postService.fetchDataByAuthorName(author));
-        } else if (publishDate != null) {
-
+        }  else if (publishDate != null) {
+            System.out.println("inside date");
             model.addAttribute("post", postService.fetchDataByPublishDate(publishDate));
         } else {
 
@@ -184,7 +186,7 @@ public class ResourcesController {
         post.setVisitor_id(Long.parseLong(id));
         postService.savePost(post);
         tagsService.saveTags(tags, postService.getId());
-        return "myblogs";
+        return "redirect:adminlogin";
     }
 
     @GetMapping("/user_signup")
@@ -218,7 +220,7 @@ public class ResourcesController {
                            @RequestParam("createdAt") String createdAt, @RequestParam("isPublished") boolean isPublished
             , @RequestParam("visitor_id") long visitor_id, Model model) throws ParseException {
 
-        System.out.println(isPublished);
+
         Date datePublishedAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(publishedAt);
         Date dateCreatedAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(createdAt);
 
@@ -254,9 +256,10 @@ public class ResourcesController {
 
         return "myblogs";
     }
+
     @PostMapping("deletePost")
-    public String deletePost(@RequestParam("id") String id){
-            postService.deletePost(id);
+    public String deletePost(@RequestParam("id") String id) {
+        postService.deletePost(id);
 
         return "redirect:userlogin";
     }

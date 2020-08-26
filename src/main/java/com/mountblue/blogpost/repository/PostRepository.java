@@ -68,4 +68,9 @@ public class PostRepository {
         return  entityManager.createNativeQuery("SELECT * FROM post ORDER BY id DESC LIMIT 1").getResultList();
 
     }
+
+    public List<Post> findPosts(String query) {
+
+      return   entityManager.createNativeQuery(query).getResultList();
+    }
 }

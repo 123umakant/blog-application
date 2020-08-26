@@ -7,7 +7,13 @@
     <meta name="viewport" content="width:device-width,initial-scale=1">
     <link rel="stylesheet" th:href="@{indexStyle.css}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+    <style>
+     .search_form_style{
+            padding: 2px;
+            margin: 5px;
+            width: 79%;
+          }
+    </style>
 </head>
 <body>
 <main>
@@ -28,37 +34,32 @@
             <h1>My Blog Application</h1>
         </div>
 
+
+
         <div>
             <form action="/">
                 <input style="padding:2px;margin:5px;border-radius:21px;width:79%" type="text" name="search"
-                       placeholder="Author,Title,Excerpt,Content" required>
-                <button name="button">Search</button>
+                       placeholder="Author,Title,Excerpt,Content">
+                <select name="sort" style="padding:2px;margin:5px;width:79%">
+                    <option>Sort</option>
+                    <option value="new">New First</option>
+                    <option value="old">Old First</option>
+                </select>
+                <input type="date" class="search_form_style" name="publishDate"><br>
+                <button name="button" class="search_form_style">Search</button>
             </form>
-
-            <div>
-                <form action="/">
-                    <div>
-                        <select name="sort" style="padding:2px;margin:5px;width:79%">
-                            <option>Sort</option>
-                            <option value="new">New First</option>
-                            <option value="old">Old First</option>
-                        </select>
-                        <button name="button"> Sort</button>
-                    </div>
-                </form>
-
-                <form>
-                    <input type="text" name="author" placeholder="authors name">
-                    <input type="date" name="publishDate">
-                    <input type="submit" name="submit">
-                </form>
-
-            </div>
 
         </div>
     </div>
+  <!--  <div style="display: flex;justify-content: flex-end;">
+        <form>
+            <button>java</button>
+            <button>online</button>
+            <button>Article</button>
+            <button>tutorial</button>
 
-
+        </form>
+    </div>-->
     <div class="row">
 
         <div class="column" th:each="items : ${post}">

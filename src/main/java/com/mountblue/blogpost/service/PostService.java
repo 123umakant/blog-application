@@ -39,7 +39,8 @@ public class PostService {
 
     public List<Post> retireAllPostValues(int page, String sort) {
         String query = "";
-        if (sort == "new") {
+
+        if (sort.equals("new")) {
             query = "select * from post published_at order by published_at asc limit " +
                     LIMIT + " offset " + ((page - 1) * OFFSET);
         } else {
@@ -97,5 +98,14 @@ public class PostService {
             id = intId.longValue();
         }
         return id;
+    }
+
+    public List<Post> getSearchedPostAll(Integer page, String search, String sort, String publishDate) {
+        if(sort.equals("new")) sort ="asc";
+        else sort="desc";
+
+        String query ="select * from post where to_tsvector(author ||' ' || content || ' ' || excerpt || ' ' || title) @@ to_tsquery('"+ search + "') and CAST(published_at as DATE)='" + publishDate + "'";
+
+     return    postRepository.findPosts(query);
     }
 }
