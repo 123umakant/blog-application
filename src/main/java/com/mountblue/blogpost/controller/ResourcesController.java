@@ -49,7 +49,10 @@ public class ResourcesController {
     public String homePage(@RequestParam(value = "page", required = false) Integer page, @RequestParam
             (value = "sort", required = false) String sort,
                            @RequestParam(value = "publishDate", required = false) String publishDate,
-                           @RequestParam(value = "search", required = false) String search, Model model) {
+                           @RequestParam(value = "search", required = false) String search,
+                           @RequestParam(value = "tagSearch", required = false) String tagSearch,
+                           @RequestParam(value = "tagSearchId", required = false) String tagSearchId,
+                           Model model) {
 
         if (page == null || page < 1) {
             page = 1;
@@ -68,12 +71,16 @@ public class ResourcesController {
         }  else if (publishDate != null) {
             System.out.println("inside date");
             model.addAttribute("post", postService.fetchDataByPublishDate(publishDate));
-        } else {
+        }else if(tagSearch !=null){
+            System.out.println(tagSearch);
+            model.addAttribute("post", tagsService.retireAllPostValues(tagSearchId));
+        }
+        else {
 
             model.addAttribute("post", postService.retireAllPostValues(page));
         }
 
-        model.addAttribute("user", userService.retireAllValues());
+        model.addAttribute("tags", tagsService.retireAllValues());
         model.addAttribute("page", page);
 
         return "index";
@@ -97,7 +104,6 @@ public class ResourcesController {
             request.getSession().setAttribute("userName", userName);
             request.getSession().setAttribute("password", password);
         }
-
 
         author.setName(userName);
         author.setPassword(password);

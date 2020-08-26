@@ -3,7 +3,6 @@ package com.mountblue.blogpost.repository;
 
 import com.mountblue.blogpost.model.PostTag;
 import com.mountblue.blogpost.model.Tag;
-import com.mountblue.blogpost.service.TagsService;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -39,5 +38,10 @@ public class TagsRepository {
 
     public List<Tag> getTags(String queryTag) {
         return entityManager.createNativeQuery(queryTag, Tag.class).getResultList();
+    }
+
+    public List<Tag> getTags() {
+
+        return entityManager.createNativeQuery("select distinct * from Tag limit 4",Tag.class).getResultList();
     }
 }

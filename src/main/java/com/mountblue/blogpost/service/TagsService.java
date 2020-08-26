@@ -1,7 +1,9 @@
 package com.mountblue.blogpost.service;
 
+import com.mountblue.blogpost.model.Post;
 import com.mountblue.blogpost.model.PostTag;
 import com.mountblue.blogpost.model.Tag;
+import com.mountblue.blogpost.repository.PostRepository;
 import com.mountblue.blogpost.repository.PostTagRepository;
 import com.mountblue.blogpost.repository.TagsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class TagsService {
 
     @Autowired
     PostTagRepository postTagRepository;
+    @Autowired
+    PostRepository postRepository;
 
     Tag tag = new Tag();
 
@@ -70,5 +74,24 @@ public class TagsService {
             }
         }
         return tagsStr;
+    }
+
+    public List<Tag> retireAllValues() {
+      return tagsRepository.getTags();
+    }
+
+    public List<Post> retireAllPostValues(String tagSearchId) {
+        List<Post> posts=null;
+       String query ="select * from post_tag where tag_id="+tagSearchId;
+             List<Object>  postTags=  postTagRepository.getPostsId(query);
+                Iterator<Object> itr = postTags.iterator();
+                while (itr.hasNext()){
+                    Object[] postValues = (Object[]) itr.next();
+                    BigInteger postId = (BigInteger) postValues[2];
+                    if(postRepository.findAllPostValue(postId.longValue()).size()>0) {
+                        posts.add(postRepository.findAllPostValue(postId.longValue()).get(0));
+                    }
+                }
+                return posts;
     }
 }

@@ -29,7 +29,7 @@
 
     </header>
 
-    <div class="main-container">
+    <div class="main-container" th>
         <div>
             <h1>My Blog Application</h1>
         </div>
@@ -51,15 +51,17 @@
 
         </div>
     </div>
-  <!--  <div style="display: flex;justify-content: flex-end;">
-        <form>
-            <button>java</button>
-            <button>online</button>
-            <button>Article</button>
-            <button>tutorial</button>
 
+    <div style="display: flex;justify-content: flex-end;">
+        <div th:each="items : ${tags}" style="margin:5px;">
+        <form action="/" >
+            <input type="hidden" name="tagSearchId" th:value="${items.id}">
+            <input type="hidden" name="tagSearch" th:value="${items.name}">
+            <button th:text="${items.name}">Tags</button>
         </form>
-    </div>-->
+        </div>
+    </div>
+
     <div class="row">
 
         <div class="column" th:each="items : ${post}">

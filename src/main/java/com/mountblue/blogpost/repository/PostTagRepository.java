@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -18,5 +19,10 @@ public class PostTagRepository {
     public void savePostTag(PostTag postTag) {
 
         entityManager.merge(postTag);
+    }
+
+    public List<Object> getPostsId(String query) {
+        System.out.println(query);
+       return entityManager.createNativeQuery(query).getResultList();
     }
 }
