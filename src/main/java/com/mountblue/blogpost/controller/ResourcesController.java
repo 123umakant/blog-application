@@ -3,7 +3,7 @@ package com.mountblue.blogpost.controller;
 
 import com.mountblue.blogpost.model.Comment;
 import com.mountblue.blogpost.model.Post;
-import com.mountblue.blogpost.model.Visitor;
+import com.mountblue.blogpost.model.Author;
 import com.mountblue.blogpost.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,7 +41,7 @@ public class ResourcesController {
     @Autowired
     CommentService commentService;
 
-    Visitor author = new Visitor();
+    Author author = new Author();
     Post post = new Post();
     Comment commentModal = new Comment();
 

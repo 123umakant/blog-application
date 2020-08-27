@@ -1,7 +1,8 @@
 package com.mountblue.blogpost.service;
 
+import com.mountblue.blogpost.dto.RegisterRequest;
 import com.mountblue.blogpost.model.Post;
-import com.mountblue.blogpost.model.Visitor;
+import com.mountblue.blogpost.model.Author;
 import com.mountblue.blogpost.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,13 +15,13 @@ public class AuthorService {
     @Autowired
     AuthorRepository authorRepository;
 
-    public boolean verifyDetail(Visitor visitor) {
-        boolean value = authorRepository.verifyDetail(visitor);
+    public boolean verifyDetail(Author author) {
+        boolean value = authorRepository.verifyDetail(author);
         return value;
     }
 
-    public void saveLoginDetail(Visitor visitor) {
-        authorRepository.saveLoginDetail(visitor);
+    public void saveLoginDetail(Author author) {
+        authorRepository.saveLoginDetail(author);
     }
 
     public List<Post> getAuthorPosts(long id) {
@@ -28,13 +29,14 @@ public class AuthorService {
     }
 
     public long getId(String userName, String password) {
-        List<Visitor> visitor = authorRepository.findId(userName, password);
-        return visitor.get(VISITOR_INDEX).getId();
+        List<Author> author = authorRepository.findId(userName, password);
+        return author.get(VISITOR_INDEX).getId();
     }
 
-    public boolean verifyAdminDetail(Visitor author) {
+    public boolean verifyAdminDetail(Author author) {
         String query = "select * from visitor where name='" + author.getName() + "' and password='" +
                 author.getPassword() + "'";
         return authorRepository.verifyAdminDetail(query);
     }
+
 }

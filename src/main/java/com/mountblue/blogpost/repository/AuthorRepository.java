@@ -1,7 +1,7 @@
 package com.mountblue.blogpost.repository;
 
 import com.mountblue.blogpost.model.Post;
-import com.mountblue.blogpost.model.Visitor;
+import com.mountblue.blogpost.model.Author;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -16,20 +16,20 @@ public class AuthorRepository {
     @PersistenceContext
     EntityManager entityManager;
 
-    public void saveLoginDetail(Visitor visitor) {
+    public void saveLoginDetail(Author author) {
 
-        List<Visitor> list = entityManager.createNativeQuery("select * from visitor where email='" + visitor.getEmail() + "' and password='" + visitor.getPassword() + "'",
-                Visitor.class).getResultList();
+        List<Author> list = entityManager.createNativeQuery("select * from visitor where email='" + author.getEmail() + "' and password='" + author.getPassword() + "'",
+                Author.class).getResultList();
 
         if (list.size() == 0) {
-            entityManager.merge(visitor);
+            entityManager.merge(author);
         }
     }
 
-    public boolean verifyDetail(Visitor visitor) {
+    public boolean verifyDetail(Author author) {
         boolean flag = false;
-        List<Visitor> list = entityManager.createNativeQuery("select * from visitor where email='" + visitor.getEmail() + "' and password='" + visitor.getPassword() + "'",
-                Visitor.class).getResultList();
+        List<Author> list = entityManager.createNativeQuery("select * from visitor where email='" + author.getEmail() + "' and password='" + author.getPassword() + "'",
+                Author.class).getResultList();
 
         if (list.size() == 1) {
             flag = true;
@@ -45,17 +45,17 @@ public class AuthorRepository {
                 , Post.class).getResultList();
     }
 
-    public List<Visitor> findId(String userName, String password) {
+    public List<Author> findId(String userName, String password) {
 
         return entityManager.createNativeQuery("select * from visitor where email='" +
                         userName + "' and password='" + password + "'",
-                Visitor.class).getResultList();
+                Author.class).getResultList();
 
     }
 
     public boolean verifyAdminDetail(String query) {
         boolean flag = false;
-        List<Visitor> list = entityManager.createNativeQuery(query, Visitor.class).getResultList();
+        List<Author> list = entityManager.createNativeQuery(query, Author.class).getResultList();
 
         if (list.size() == 1) {
             flag = true;
