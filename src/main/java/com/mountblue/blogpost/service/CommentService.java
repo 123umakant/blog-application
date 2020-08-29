@@ -1,5 +1,6 @@
 package com.mountblue.blogpost.service;
 
+import com.mountblue.blogpost.dto.CommentDto;
 import com.mountblue.blogpost.model.Comment;
 import com.mountblue.blogpost.repository.CommentRepository;
 import org.json.JSONException;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -22,26 +24,34 @@ public class CommentService {
     @Autowired
     CommentRepository commentRepository;
 
-    public void saveComment(Comment commentModal) {
-        commentModal.setCreatedAt(new Date());
-        commentModal.setUpdatedAt(new Date());
-        commentRepository.saveCommentData(commentModal);
+    public void createComment(CommentDto commentDto) {
+
+        Comment comment = new Comment();
+        comment.setPostId(commentDto.getPostId());
+        comment.setComment(commentDto.getComment());
+        comment.setName(commentDto.getName());
+        comment.setEmail(commentDto.getEmail());
+        comment.setCreatedAt(new Date());
+        comment.setUpdatedAt(new Date());
+        commentRepository.saveCommentData(comment);
     }
 
-    public String retriveComments(String postId) {
-        String comment = null;
-        String id = null;
-        List<Comment> list = commentRepository.retriveComments(postId);
-
-        Iterator itr = list.iterator();
-
-        while (itr.hasNext()) {
-            Object[] obj = (Object[]) itr.next();
-            comment += "," + String.valueOf(obj[COMMENT_INDEX]);
-            id += "," + String.valueOf(obj[0]);
+    public List<CommentDto> retrieveComments(long postId) {
+           List<CommentDto> dto =new ArrayList<>();
+        List<Comment> comments= commentRepository.retriveComments(postId);
+        Iterator<Comment> itr = comments.iterator();
+        while (itr.hasNext()){
+            Comment comment = itr.next();
+           CommentDto commentDto = new CommentDto();
+           commentDto.setId(comment.getId());
+           commentDto.setComment(comment.getComment());
+           commentDto.setEmail(comment.getEmail());
+           commentDto.setName(comment.getName());
+           commentDto.setPostId(comment.getPostId());
+           dto.add(commentDto);
         }
+           return dto;
 
-        return comment + "&" + id;
     }
 
     public Comment editComments(String postId, String commentId) {
@@ -61,20 +71,20 @@ public class CommentService {
         return comment;
     }
 
-    public void deleteComments(String postId) {
-        long id = Long.parseLong(postId);
-        String query = "delete from Comment where post_id=" + postId;
-        commentRepository.deleteCommentData(query);
+    public int deleteComment(CommentDto commentDto) {
+        String query = "delete from Comment where post_id=" + commentDto.getPostId();
+       return commentRepository.deleteComment(query);
     }
 
-    public void updateComment(Comment postComment) {
+    public int updateComment(CommentDto postCommentDto) {
 
-        commentRepository.updateComment(postComment);
-
+        Comment postComment = new Comment();
+        postComment.setComment(postCommentDto.getComment());
+        postComment.setName(postCommentDto.getName());
+        postComment.setEmail(postCommentDto.getEmail());
+        postComment.setUpdatedAt(new Date());
+        postComment.setPostId(postCommentDto.getPostId());
+       return commentRepository.updateComment(postComment);
     }
 
-    public Date findComment(String commentId) {
-
-       return commentRepository.findComment(commentId);
-    }
 }

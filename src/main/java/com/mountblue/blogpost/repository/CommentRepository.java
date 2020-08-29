@@ -20,13 +20,13 @@ public class CommentRepository {
         entityManager.merge(comment);
     }
 
-    public List<Comment> retriveComments(String postId) {
+    public List<Comment> retriveComments(long postId) {
 
-        return entityManager.createNativeQuery("select * from Comment where post_id=" + Long.parseLong(postId)).getResultList();
+        return entityManager.createNativeQuery("select * from Comment where post_id=" + postId,Comment.class).getResultList();
     }
 
-    public void deleteCommentData(String query) {
-        System.out.println(entityManager.createNativeQuery(query,Comment.class).executeUpdate());
+    public int deleteComment(String query) {
+         return entityManager.createNativeQuery(query,Comment.class).executeUpdate();
     }
 
 
@@ -34,12 +34,9 @@ public class CommentRepository {
         return entityManager.createNativeQuery("select * from Comment where id=" + Long.parseLong(commentId)).getResultList();
     }
 
-    public void updateComment(Comment postComment) {
-        entityManager.merge(postComment);
-    }
-
-    public Date findComment(String commentId) {
-       Date createdAt = entityManager.find(Comment.class,Long.parseLong(commentId)).getCreatedAt();
-        return createdAt;
+    public int updateComment(Comment postComment) {
+        String query ="update Comment set comment='" + postComment.getComment()+
+                "',updated_at='"+postComment.getUpdatedAt()+"'where post_id='"+postComment.getPostId()+"'";
+       return entityManager.createNativeQuery(query,Comment.class).executeUpdate();
     }
 }

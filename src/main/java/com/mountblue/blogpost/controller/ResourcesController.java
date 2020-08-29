@@ -1,26 +1,24 @@
 package com.mountblue.blogpost.controller;
 
 
+import com.mountblue.blogpost.dto.*;
+import com.mountblue.blogpost.model.Author;
 import com.mountblue.blogpost.model.Comment;
 import com.mountblue.blogpost.model.Post;
-import com.mountblue.blogpost.model.Visitor;
+import com.mountblue.blogpost.model.Tag;
 import com.mountblue.blogpost.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/main")
 public class ResourcesController {
 
     private final int POST_INDEX = 0;
@@ -41,303 +39,172 @@ public class ResourcesController {
     @Autowired
     CommentService commentService;
 
-    Visitor author = new Visitor();
+    Author author = new Author();
     Post post = new Post();
     Comment commentModal = new Comment();
 
-    @GetMapping("/")
-    public String homePage(@RequestParam(value = "page", required = false) Integer page, @RequestParam
+    @GetMapping("")
+    public ResponseEntity<FilterAndSearchPostDto> homePage(@RequestParam(value = "page", required = false) Integer page, @RequestParam
             (value = "sort", required = false) String sort,
-                           @RequestParam(value = "publishDate", required = false) String publishDate,
-                           @RequestParam(value = "search", required = false) String search,
-                           @RequestParam(value = "tagSearch", required = false) String tagSearch,
-                           @RequestParam(value = "tagSearchId", required = false) String tagSearchId,
-                           Model model) {
+                                                           @RequestParam(value = "publishDate", required = false) String publishDate,
+                                                           @RequestParam(value = "search", required = false) String search,
+                                                           @RequestParam(value = "tagSearch", required = false) String tagSearch,
+                                                           @RequestParam(value = "tagSearchId", required = false) String tagSearchId,
+                                                           Model model) {
+
+        FilterAndSearchPostDto filterAndSearchPostDto = new FilterAndSearchPostDto();
+
+        HashMap hashMap = new HashMap();
 
         if (page == null || page < 1) {
             page = 1;
         }
-        if(search != null && search !="" && sort != null && !sort.equals("Sort") && publishDate != null) {
+        if (search != null && search != "" && sort != null && !sort.equals("Sort") && publishDate != null) {
             System.out.println("inside all search");
             model.addAttribute("post", postService.getSearchedPostAll(page, search, sort, publishDate));
+            hashMap.put("post", postService.getSearchedPostAll(page, search, sort, publishDate));
         }
-        if (search != null && search !="") {
+        if (search != null && search != "") {
             System.out.println("inside search");
             model.addAttribute("post", postService.getSearchedPost(search));
+            hashMap.put("post", postService.getSearchedPost(search));
         } else if (sort != null && !sort.equals("Sort")) {
             System.out.println(sort);
             System.out.println("inside sort");
             model.addAttribute("post", postService.retireAllPostValues(page, sort));
-        }  else if (publishDate != null) {
+            hashMap.put("post", postService.retireAllPostValues(page, sort));
+        } else if (publishDate != null) {
             System.out.println("inside date");
             model.addAttribute("post", postService.fetchDataByPublishDate(publishDate));
-        }else if(tagSearch !=null){
+            hashMap.put("post", postService.fetchDataByPublishDate(publishDate));
+        } else if (tagSearch != null) {
             System.out.println(tagSearch);
             model.addAttribute("post", tagsService.retireAllPostValues(tagSearchId));
-        }
-        else {
+            hashMap.put("post", model.addAttribute("post", tagsService.retireAllPostValues(tagSearchId)));
+        } else {
 
             model.addAttribute("post", postService.retireAllPostValues(page));
+            hashMap.put("post", postService.retireAllPostValues(page));
         }
 
         model.addAttribute("tags", tagsService.retireAllValues());
         model.addAttribute("page", page);
+        hashMap.put("tags", tagsService.retireAllValues());
+        hashMap.put("page", page);
 
-        return "index";
+        filterAndSearchPostDto.setHashMap(hashMap);
+        return new ResponseEntity(filterAndSearchPostDto, HttpStatus.OK);
     }
 
-    @GetMapping("/adminlogin")
-    public String adminLogin(HttpSession session, Model model) {
-        String userName = (String) session.getAttribute("userName");
-        String password = (String) session.getAttribute("password");
-        model.addAttribute("userName", userName);
-        model.addAttribute("password", password);
-        return "adminlogin";
-    }
+    @PostMapping("/get/mypost")
+    public ResponseEntity<List<Post>> postPage(@RequestBody RegisterDto registerDto) {
 
-    @PostMapping("/adminlogin")
-    public String verifyAdminLogin(@RequestParam("userName") String userName,
-                                   @RequestParam("password") String password, Model model, HttpServletRequest request) {
-
-        String userNameSession = (String) request.getSession().getAttribute("userName");
-        if (userNameSession == null) {
-            request.getSession().setAttribute("userName", userName);
-            request.getSession().setAttribute("password", password);
-        }
-
-        author.setName(userName);
-        author.setPassword(password);
-
-        boolean value = authorService.verifyAdminDetail(author);
-        if (value) {
-            model.addAttribute("post", postService.retireAllPost());
-            return "adminPage";
-        } else {
-            return "adminlogin";
-        }
-
-    }
-
-    @GetMapping("/userlogin")
-    public String userLogin(HttpSession session, Model model) {
-
-        String email = (String) session.getAttribute("email");
-        String password = (String) session.getAttribute("password");
-        model.addAttribute("email", email);
-        model.addAttribute("password", password);
-        return "userlogin";
-    }
-
-    @PostMapping("/userlogin")
-    public String logiDetail(@RequestParam("email") String email, @RequestParam("password") String password, Model model
-            , HttpServletRequest request) {
-
-        String emailSession = (String) request.getSession().getAttribute("email");
-        if (emailSession == null) {
-            request.getSession().setAttribute("email", email);
-            request.getSession().setAttribute("password", password);
-        }
-
-        author.setEmail(email);
-        author.setPassword(password);
-        boolean value = authorService.verifyDetail(author);
-
-        model.addAttribute("userName", email);
-        model.addAttribute("password", password);
-        if (value) {
-
-            List<Post> list = authorService.getAuthorPosts(authorService.getId(email, password));
-            if (list.size() == POST_INDEX) {
-                model.addAttribute("id", authorService.getId(email, password));
-                return "post";
-            } else {
-                model.addAttribute("post", list);
-                return "myblogs";
-            }
-        } else {
-
-            return "user_signup";
-        }
-
-    }
-
-
-    @GetMapping("/post")
-    public String postPage(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
-        author.setEmail(email);
-        author.setPassword(password);
-        boolean value = authorService.verifyDetail(author);
-        if (value) {
-            model.addAttribute("id", authorService.getId(email, password));
-
-            return "post";
-        } else {
-
-            return "user_signup";
-        }
-
+        List<Post> posts = authorService.getPosts(registerDto.getEmail(), registerDto.getPassword());
+        return new ResponseEntity(posts, HttpStatus.OK);
     }
 
     @PostMapping("/post")
-    public String post(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt,
-                       @RequestParam("content") String content, @RequestParam("author") String author,
-                       @RequestParam("tags") String tags,
-                       @RequestParam("id") String id) {
+    public ResponseEntity<ResponseStatusDto> post(@RequestBody PostDto postDto) {
 
-        post.setId(post.getId() + INCREMENT_VALUE_BY_ONE);
-        post.setTitle(title);
-        post.setExcerpt(excerpt);
-        post.setContent(content);
-        post.setAuthor(author);
-        post.setVisitor_id(Long.parseLong(id));
-        postService.savePost(post);
-        tagsService.saveTags(tags, postService.getId());
-        return "redirect:adminlogin";
+        postService.savePost(postDto);
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto();
+        responseStatusDto.setStatus("Post Saved");
+        return new ResponseEntity(responseStatusDto, HttpStatus.OK);
     }
 
-    @GetMapping("/user_signup")
-    public String userLoginDetail() {
-        return "user_signup";
-    }
-
-    @PostMapping("/user_signup")
-    public String userSignUp(@RequestParam("name") String name, @RequestParam("email") String email,
-                             @RequestParam("password") String password) {
-
-        author.setName(name);
-        author.setEmail(email);
-        author.setPassword(password);
-        authorService.saveLoginDetail(author);
-        return "userlogin";
-    }
-
-    @GetMapping("viewpost")
-    public String viewPostPage(@RequestParam("id") String id, Model model) {
-
-        model.addAttribute("post", postService.retirePostValues(id));
-
-        return "viewpost";
-    }
-
-    @PostMapping("edit")
-    public String editPost(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt,
-                           @RequestParam("content") String content, @RequestParam("author") String author,
-                           @RequestParam("id") long id, @RequestParam("publishedAt") String publishedAt,
-                           @RequestParam("createdAt") String createdAt, @RequestParam("isPublished") boolean isPublished
-            , @RequestParam("visitor_id") long visitor_id, Model model) throws ParseException {
-
-
-        Date datePublishedAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(publishedAt);
-        Date dateCreatedAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(createdAt);
-
-        post.setId(id);
-        post.setTitle(title);
-        post.setExcerpt(excerpt);
-        post.setContent(content);
-        post.setAuthor(author);
-        post.setPublishedAt(datePublishedAt);
-        post.setPublished(isPublished);
-        post.setVisitor_id(visitor_id);
-        post.setCreatedAt(dateCreatedAt);
-        post.setUpdatedAt(new Date());
-        model.addAttribute("updatValues", post);
-
-        return "postedit";
-    }
 
     @PostMapping("editPost")
-    public String getPost(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt,
-                          @RequestParam("content") String content, @RequestParam("author") String author,
-                          @RequestParam("id") long id, @RequestParam("visitor_id") long visitor_id) throws ParseException {
-        post.setId(id);
-        post.setTitle(title);
-        post.setExcerpt(excerpt);
-        post.setContent(content);
-        post.setAuthor(author);
-        post.setVisitor_id(visitor_id);
-        post.setUpdatedAt(new Date());
-        post.setPublished(false);
+    public ResponseEntity<ResponseStatusDto> getPost(@RequestBody PostDto postDto) throws ParseException {
 
-        postService.updatePost(post);
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto();
+        int rowEffected = postService.updatePost(postDto);
+        if (rowEffected > 0) {
+            responseStatusDto.setStatus("Post Updated Successfully");
+        } else {
+            responseStatusDto.setStatus("No Post Available");
+        }
 
-        return "myblogs";
+
+        return new ResponseEntity(responseStatusDto, HttpStatus.OK);
     }
 
     @PostMapping("deletePost")
-    public String deletePost(@RequestParam("id") String id) {
-        postService.deletePost(id);
-
-        return "redirect:userlogin";
+    public ResponseEntity<ResponseStatusDto> deletePost(@RequestBody PostDto postDto) {
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto();
+        postService.deletePost(postDto.getId());
+        int rowEffected = tagsService.deleteTags(postDto.getId());
+        if (rowEffected > 0) {
+            responseStatusDto.setStatus("Post and Tags Deleted");
+        } else {
+            responseStatusDto.setStatus("No post and tags found");
+        }
+        return new ResponseEntity(responseStatusDto, HttpStatus.OK);
     }
 
-    @PostMapping("saveComment")
-    public String getComment(@RequestParam("id") String id, @RequestParam("comment") String comment,
-                             @RequestParam("name") String name, @RequestParam("email") String email) {
+    @PostMapping("createComment")
+    public ResponseEntity<ResponseStatusDto> createComment(@RequestBody CommentDto commentDto) {
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto();
+        commentService.createComment(commentDto);
+        responseStatusDto.setStatus("comment saved");
 
-        commentModal.setPostId(Long.parseLong(id));
-        commentModal.setComment(comment);
-        commentModal.setName(name);
-        commentModal.setEmail(email);
-        commentService.saveComment(commentModal);
-        return "myblogs";
+        return new ResponseEntity(responseStatusDto, HttpStatus.OK);
     }
 
-    @ResponseBody
+
     @GetMapping("getComment")
-    public String getComment(@RequestParam("postId") String postId) {
-        return commentService.retriveComments(postId);
+    public ResponseEntity<List<CommentDto>> getComment(@RequestBody CommentDto commentDto) {
+
+        List<CommentDto> commentsDto = commentService.retrieveComments(commentDto.getPostId());
+
+        return new ResponseEntity(commentsDto, HttpStatus.OK);
+    }
+
+    @PostMapping("updatecomment")
+    public ResponseEntity<ResponseStatusDto> updateComment(@RequestBody CommentDto commentDto) {
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto();
+        int rowEffected = commentService.updateComment(commentDto);
+        if (rowEffected > 0) {
+            responseStatusDto.setStatus("comment updated");
+        } else {
+            responseStatusDto.setStatus("no comment found");
+        }
+        return new ResponseEntity(responseStatusDto, HttpStatus.OK);
     }
 
 
-    @GetMapping("editcomment")
-    public String editComment(@RequestParam("postId") String postId, @RequestParam("commentId") String commentId, Model model) {
-        model.addAttribute("comment", commentService.editComments(postId, commentId));
-        return "editComment";
+    @PostMapping("deleteComment")
+    public ResponseEntity<ResponseStatusDto> deleteComment(@RequestBody CommentDto commentDto) {
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto();
+        int rowEffected = commentService.deleteComment(commentDto);
+        if (rowEffected > 0) {
+            responseStatusDto.setStatus("comment deleted");
+        } else {
+            responseStatusDto.setStatus("no comment found");
+        }
+        return new ResponseEntity(responseStatusDto, HttpStatus.OK);
     }
 
-    @PostMapping("update_comment")
-    public String updateComment(@RequestParam("name") String name, @RequestParam("email") String email,
-                                @RequestParam("commentId") String commentId, @RequestParam("comment") String comment,
-                                @RequestParam("postId") String posId) {
-        Comment postComment = new Comment();
-        Date createdAt = commentService.findComment(commentId);
-        postComment.setComment(comment);
-        postComment.setId(Long.parseLong(commentId));
-        postComment.setName(name);
-        postComment.setEmail(email);
-        postComment.setPostId(Long.parseLong(posId));
-        postComment.setCreatedAt(createdAt);
-        postComment.setUpdatedAt(new Date());
-        commentService.updateComment(postComment);
-        return "redirect:/";
+
+    @PostMapping("getTags")
+    public ResponseEntity<List<List<Tag>>> getTags(@RequestBody TagDto tagDto) {
+        return new ResponseEntity(tagsService.retrieveTags(tagDto.getPostId()), HttpStatus.OK);
     }
 
-    @ResponseBody
-    @GetMapping("deleteComment")
-    public String deleteComment(@RequestParam("postId") String postId) {
-        commentService.deleteComments(postId);
-        return "successful";
+    @PostMapping("deleteTags")
+    public ResponseEntity<ResponseStatusDto> deleteTags(@RequestBody TagDto tagDto) {
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto();
+
+        int rowEffected = tagsService.deleteTags(tagDto.getPostId());
+
+        if (rowEffected > 0) {
+            responseStatusDto.setStatus("tags deleted");
+        } else {
+            responseStatusDto.setStatus("no tag found");
+        }
+        return new ResponseEntity(responseStatusDto, HttpStatus.OK);
+
     }
 
-    @ResponseBody
-    @GetMapping("getTags")
-    public String getTags(@RequestParam("postId") String postId) {
-        return tagsService.retriveTags(postId);
-    }
-
-    @GetMapping("deletePost")
-    public String getpostId(@RequestParam("postId") String postId) {
-
-        postService.deletePost(postId);
-        commentService.deleteComments(postId);
-        return "adminPage";
-    }
-
-    @GetMapping("logout")
-    public String logout(HttpServletRequest request) {
-        request.getSession().invalidate();
-        return "redirect:/";
-    }
 }
 
 

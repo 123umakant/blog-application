@@ -1,14 +1,19 @@
 package com.mountblue.blogpost.service;
 
+import com.mountblue.blogpost.dto.PostDto;
+import com.mountblue.blogpost.model.Author;
 import com.mountblue.blogpost.model.Post;
+import com.mountblue.blogpost.repository.AuthorRepositoryNew;
 import com.mountblue.blogpost.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -17,19 +22,45 @@ public class PostService {
     private final int OFFSET = 4;
 
     @Autowired
+    PostService postService;
+
+    @Autowired
+    private AuthServiceOld authServiceOld;
+
+    @Autowired
+    private AuthorRepositoryNew authorRepositoryNew;
+
+    @Autowired
     PostRepository postRepository;
 
     @Autowired
     AuthorService authorService;
+
+    @Autowired
+    TagsService tagsService;
+
     Post post = new Post();
 
-    public void savePost(Post post) {
+    public void savePost(PostDto postDto) {
+
+        Post post = new Post();
+        Author author = new Author();
+
+        User loggedInUser = authServiceOld.getCurrentUser().orElseThrow(() -> new IllegalArgumentException("User Not Found"));
+        author.setName(loggedInUser.getUsername());
+        Optional<Author> authorId = authorRepositoryNew.findByName(author.getName());
         Date date = new Date();
+        post.setTitle(postDto.getTitle());
+        post.setExcerpt(postDto.getExcerpt());
+        post.setContent(postDto.getContent());
+        post.setAuthor(postDto.getAuthor());
         post.setCreatedAt(date);
         post.setPublished(false);
         post.setUpdatedAt(date);
         post.setPublishedAt(date);
+        post.setAuthor_id(authorId.get().getId());
         postRepository.insertPost(post);
+        tagsService.saveTags(postDto.getTags(), postService.getId());
 
     }
 
@@ -54,8 +85,27 @@ public class PostService {
         return postRepository.findAllPostValue(Long.parseLong(id));
     }
 
-    public void updatePost(Post post) {
-        postRepository.updatePostData(post);
+    public int updatePost(PostDto postDto) {
+
+        Post post = new Post();
+        Author author = new Author();
+
+        User loggedInUser = authServiceOld.getCurrentUser().orElseThrow(() -> new IllegalArgumentException("User Not Found"));
+        author.setName(loggedInUser.getUsername());
+        Optional<Author> authorId = authorRepositoryNew.findByName(author.getName());
+
+        Date date = new Date();
+        post.setId(postDto.getId());
+        post.setTitle(postDto.getTitle());
+        post.setExcerpt(postDto.getExcerpt());
+        post.setContent(postDto.getContent());
+        post.setAuthor(postDto.getAuthor());
+        post.setPublished(false);
+        post.setUpdatedAt(date);
+        post.setPublishedAt(date);
+        post.setAuthor_id(authorId.get().getId());
+       return postRepository.updatePostData(post);
+
     }
 
     public List<Post> fetchDataByAuthorName(String author) {
@@ -82,9 +132,14 @@ public class PostService {
         return postRepository.getAllPost(query);
     }
 
-    public void deletePost(String postId) {
-        long id = Long.parseLong(postId);
-        String query = "delete from post where id=" + id;
+    public void deletePost(long postId) {
+        Author author = new Author();
+
+        User loggedInUser = authServiceOld.getCurrentUser().orElseThrow(() -> new IllegalArgumentException("User Not Found"));
+        author.setName(loggedInUser.getUsername());
+        Optional<Author> authorId = authorRepositoryNew.findByName(author.getName());
+
+        String query = "delete from post where id=" + postId+" and author_id="+authorId.get().getId();
         postRepository.deletePostData(query);
     }
 
@@ -101,11 +156,11 @@ public class PostService {
     }
 
     public List<Post> getSearchedPostAll(Integer page, String search, String sort, String publishDate) {
-        if(sort.equals("new")) sort ="asc";
-        else sort="desc";
+        if (sort.equals("new")) sort = "asc";
+        else sort = "desc";
 
-        String query ="select * from post where to_tsvector(author ||' ' || content || ' ' || excerpt || ' ' || title) @@ to_tsquery('"+ search + "') and CAST(published_at as DATE)='" + publishDate + "'";
+        String query = "select * from post where to_tsvector(author ||' ' || content || ' ' || excerpt || ' ' || title) @@ to_tsquery('" + search + "') and CAST(published_at as DATE)='" + publishDate + "'";
 
-     return    postRepository.findPosts(query);
+        return postRepository.findPosts(query);
     }
 }

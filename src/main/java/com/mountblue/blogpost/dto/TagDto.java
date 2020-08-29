@@ -1,23 +1,21 @@
-package com.mountblue.blogpost.model;
+package com.mountblue.blogpost.dto;
 
-import com.sun.istack.NotNull;
-
-import javax.persistence.*;
 import java.util.Date;
 
-
-@Entity
-public class Tag {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class TagDto {
     private long id;
-    @NotNull
     private String name;
-    @NotNull
     private Date createdAt;
-    @NotNull
     private Date updatedAt;
+    private long postId;
 
+    public long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(long postId) {
+        this.postId = postId;
+    }
 
     public long getId() {
         return id;
@@ -49,15 +47,5 @@ public class Tag {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public String toString() {
-        return "Tag{" +
-                "id=" + id +
-                ", name=" + name +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
     }
 }

@@ -1,7 +1,7 @@
 package com.mountblue.blogpost.repository;
 
 
-import com.mountblue.blogpost.model.Visitor;
+import com.mountblue.blogpost.model.Author;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -16,12 +16,12 @@ public class UserRepository {
     @PersistenceContext
     EntityManager entityManager;
 
-    public Visitor insert(Visitor user) {
+    public Author insert(Author user) {
         return entityManager.merge(user);
     }
 
-    public List<Visitor> findAll() {
-        return entityManager.createQuery("SELECT e FROM Visitor e", Visitor.class).getResultList();
+    public List<Author> findAll() {
+        return entityManager.createQuery("SELECT e FROM Visitor e", Author.class).getResultList();
     }
 
 }

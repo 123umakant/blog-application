@@ -25,4 +25,9 @@ public class PostTagRepository {
         System.out.println(query);
        return entityManager.createNativeQuery(query).getResultList();
     }
+
+    public int deletePostTags(String queryPostTags) {
+       return entityManager.createNativeQuery(queryPostTags,PostTag.class).executeUpdate();
+
+    }
 }

@@ -1,5 +1,6 @@
 package com.mountblue.blogpost.service;
 
+import com.mountblue.blogpost.dto.TagDto;
 import com.mountblue.blogpost.model.Post;
 import com.mountblue.blogpost.model.PostTag;
 import com.mountblue.blogpost.model.Tag;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -56,9 +58,9 @@ public class TagsService {
         }
     }
 
-    public String retriveTags(String postId) {
+    public List<List<Tag>> retrieveTags(long postId) {
         String query = "select * from post_tag where post_id=" + postId;
-        String tagsStr = null;
+        List<List<Tag>> tagsArray = new ArrayList<>();
         List<PostTag> postTags = tagsRepository.retriveAllTags(query);
         Iterator<PostTag> itr = postTags.iterator();
         while (itr.hasNext()) {
@@ -66,32 +68,44 @@ public class TagsService {
 
             String queryTag = "select * from tag where id=" + object.getTagId();
             List<Tag> tags = tagsRepository.getTags(queryTag);
-            Iterator<Tag> itrTag = tags.iterator();
-
-            while (itrTag.hasNext()) {
-                Tag tag = itrTag.next();
-                tagsStr += "," + tag.getName();
-            }
+            tagsArray.add(tags);
         }
-        return tagsStr;
+        return tagsArray;
     }
 
     public List<Tag> retireAllValues() {
-      return tagsRepository.getTags();
+        return tagsRepository.getTags();
     }
 
     public List<Post> retireAllPostValues(String tagSearchId) {
-        List<Post> posts=null;
-       String query ="select * from post_tag where tag_id="+tagSearchId;
-             List<Object>  postTags=  postTagRepository.getPostsId(query);
-                Iterator<Object> itr = postTags.iterator();
-                while (itr.hasNext()){
-                    Object[] postValues = (Object[]) itr.next();
-                    BigInteger postId = (BigInteger) postValues[2];
-                    if(postRepository.findAllPostValue(postId.longValue()).size()>0) {
-                        posts.add(postRepository.findAllPostValue(postId.longValue()).get(0));
-                    }
-                }
-                return posts;
+        List<Post> posts = null;
+        String query = "select * from post_tag where tag_id=" + tagSearchId;
+        List<Object> postTags = postTagRepository.getPostsId(query);
+        Iterator<Object> itr = postTags.iterator();
+        while (itr.hasNext()) {
+            Object[] postValues = (Object[]) itr.next();
+            BigInteger postId = (BigInteger) postValues[2];
+            if (postRepository.findAllPostValue(postId.longValue()).size() > 0) {
+                posts.add(postRepository.findAllPostValue(postId.longValue()).get(0));
+            }
+        }
+        return posts;
     }
+
+    public int deleteTags(long id) {
+
+        String query = "select * from post_tag where post_id=" + id;
+        List<PostTag> postTags = tagsRepository.retriveAllTags(query);
+
+        Iterator<PostTag> itr = postTags.iterator();
+        while (itr.hasNext()) {
+            PostTag object = itr.next();
+            String queryTag = "delete from tag where id=" + object.getTagId();
+            tagsRepository.deleteTags(queryTag);
+        }
+        String queryPostTags = "delete from post_tag where post_id=" + id;
+        return postTagRepository.deletePostTags(queryPostTags);
+    }
+
+
 }

@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 public class Post {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotNull
     private String title;
@@ -30,15 +30,15 @@ public class Post {
     @NotNull
     private Date updatedAt;
     @NotNull
-    private long visitor_id;
+    private long author_id;
 
 
-    public long getVisitor_id() {
-        return visitor_id;
+    public long getAuthor_id() {
+        return author_id;
     }
 
-    public void setVisitor_id(long visitor_id) {
-        this.visitor_id = visitor_id;
+    public void setAuthor_id(long author_id) {
+        this.author_id = author_id;
     }
 
     public long getId() {

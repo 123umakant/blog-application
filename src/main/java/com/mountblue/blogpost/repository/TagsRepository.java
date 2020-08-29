@@ -44,4 +44,9 @@ public class TagsRepository {
 
         return entityManager.createNativeQuery("select distinct * from Tag limit 4",Tag.class).getResultList();
     }
+
+    public int deleteTags(String queryTag) {
+
+        return entityManager.createNativeQuery(queryTag,Tag.class).executeUpdate();
+    }
 }
