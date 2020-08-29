@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Author Edit Post Portal</title>
+    <style>
+        input{
+        padding:5px;
+        margin :5px;
+        }
+    .container-form{
+    display: flex;
+    justify-content: center;
+    border: 10px;
+    background-color: aliceblue;
+    align-content: center;
+
+    }
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="container-form">
+
+    <form action="editPost" method="post">
+        <table>
+            <thead>
+            <tr>
+                <th colspan="2"><h2>Edit Your Post</h2>
+                    <hr>
+                </th>
+            </tr>
+            </thead>
+            <tr>
+                <td><label>Title : </label></td>
+                <td><input type="text" name="title" th:value="${updatValues.title}" placeholder="Enter Your post title"
+                           required><br></td>
+            </tr>
+            <tr>
+                <td><label>Enter your post excerpt : </label></td>
+                <td><input type="text" name="excerpt" th:value="${updatValues.excerpt}"
+                           placeholder="Enter Your post excerpt" required><br></td>
+            </tr>
+            <tr>
+                <td><label>Enter your post content : </label></td>
+                <td><textarea style="margin: 0px;height: 86px; width: 192px;" name="content"
+                              th:text="${updatValues.content}" placeholder="content"
+                              required></textarea><br></td>
+
+            </tr>
+            <tr>
+                <td><label>Enter author name : </label></td>
+                <td><input type="text" name="author" placeholder="Author Name" th:value="${updatValues.author}"
+                           required></input><br></td>
+            </tr>
+            <input type="text" style="display:none" name="id" th:value="${updatValues.id}"/>
+            <input type="text" style="display:none" name="visitor_id" th:value="${updatValues.visitor_id}"/>
+
+        </table>
+        <input style="margin-left: 33%;" type="submit">
+    </form>
+</div>
+
+</body>
+</html>

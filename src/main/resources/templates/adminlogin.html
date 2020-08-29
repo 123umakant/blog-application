@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Login Portal</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        input{
+        padding:5px;
+        margin :5px;
+        }
+    .container-form{
+    display: flex;
+    justify-content: center;
+    border: 10px;
+    background-color: aliceblue;
+    align-content: center;
+
+    }
+
+    </style>
+</head>
+<body>
+
+<div class="container-form">
+    <input type="text" th:value="${userName}" name="userName" id="userName" style="display:none">
+    <input type="text" th:value="${password}" name="password" id="password" style="display:none">
+
+    <form action="adminlogin" method="post" id="formId">
+        <table>
+            <thead>
+            <tr>
+                <th colspan="2"><h2>Enter Your Login Details</h2>
+                    <hr>
+                </th>
+            </tr>
+            </thead>
+            <tr>
+                <td><label>Enter Your User Name : </label></td>
+                <td><input type="text" name="userName" th:value="${userName}" placeholder="Enter Your User Name" required><br></td>
+            </tr>
+            <tr>
+                <td><label>Enter Your Password : </label></td>
+                <td><input type="password" name="password" th:value="${password}" placeholder="Enter Your Password" required><br></td>
+            </tr>
+
+        </table>
+        <input style="margin-left: 33%;" type="submit">
+    </form>
+</div>
+<script>
+$(window).on('load', function(){
+        var userName = $("#userName").val();
+        var password = $("#password").val();
+        if(userName !=''){
+         $("#formId").submit();
+        }
+});
+</script>
+</body>
+</html>

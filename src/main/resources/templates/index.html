@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MountBlue Blog Post</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width:device-width,initial-scale=1">
+    <link rel="stylesheet" th:href="@{indexStyle.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+     .search_form_style{
+            padding: 2px;
+            margin: 5px;
+            width: 79%;
+          }
+    </style>
+</head>
+<body>
+<main>
+    <header class="div1">
+        <a th:href="@{/}"> <img class="logo" src="BlogPostLogo.png" alt="logo"></a>
+        <nav>
+            <ul class="navLinks">
+                <li><a href="/userlogin" target="_blank">Author Login</a></li>
+                <li><a href="/user_signup" target="_blank">Author SignUp</a></li>
+                <li><a href="/adminlogin" target="_blank">Admin Login</a></li>
+            </ul>
+        </nav>
+
+    </header>
+
+    <div class="main-container" th>
+        <div>
+            <h1>My Blog Application</h1>
+        </div>
+
+
+
+        <div>
+            <form action="/">
+                <input style="padding:2px;margin:5px;border-radius:21px;width:79%" type="text" name="search"
+                       placeholder="Author,Title,Excerpt,Content">
+                <select name="sort" style="padding:2px;margin:5px;width:79%">
+                    <option>Sort</option>
+                    <option value="new">New First</option>
+                    <option value="old">Old First</option>
+                </select>
+                <input type="date" class="search_form_style" name="publishDate"><br>
+                <button name="button" class="search_form_style">Search</button>
+            </form>
+
+        </div>
+    </div>
+
+    <div style="display: flex;justify-content: flex-end;">
+        <div th:each="items : ${tags}" style="margin:5px;">
+        <form action="/" >
+            <input type="hidden" name="tagSearchId" th:value="${items.id}">
+            <input type="hidden" name="tagSearch" th:value="${items.name}">
+            <button th:text="${items.name}">Tags</button>
+        </form>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="column" th:each="items : ${post}">
+            <a th:href="@{/viewpost?id=} + ${items.id}">
+                <div class="card">
+                    <h2 th:text="${items.title}">Title</h2>
+                    <h3 th:text="${items.excerpt}"></h3>
+                    <h4 th:text="${items.author}">Author</h4>
+                    <h5 th:text="${items.publishedAt}">Publish Date</h5>
+
+                </div>
+            </a>
+        </div>
+
+
+    </div>
+
+    <div style="display:flex;justify-content:center;">
+        <a th:href="@{/?page=}+${page-1}" style="color:black">Previous</a><span
+            style="color:black;margin-left:5px;margin-right:5px;"> | </span>
+        <a th:href="@{/?page=}+${page+1}" style="color:black">Next</a>
+    </div>
+
+    <div class="footer">
+        <p> Footer</p>
+    </div>
+</main>
+
+</body>
+</html>

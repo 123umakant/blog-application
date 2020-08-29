@@ -1,0 +1,131 @@
+*{
+margin: 0; padding: 0;
+box-sizing: border-box; text-align: center;
+color:block;
+}
+body{
+        color:black;
+}
+
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:30px 10%;
+    background-color:#c7cbde;
+    height:75px;
+}
+
+logo{
+    cursor:pointer;
+}
+.navLinks{
+    list-style:none;
+    display:flex;
+}
+.navLinks li{
+ display:block-inline;
+ padding:0px 20px;
+}
+.navLinks li a{
+
+    color: black;
+}
+.navLinks li a:hover{
+ color:gray;
+}
+.cta {
+  padding: 9px 25px;
+  background-color: gray;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease 0s;
+
+}
+
+.cta:hover {
+  background-color: gray;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.tagStyle{
+         background: black;
+      color: #878787;
+      float: left;
+      line-height: 100%;
+      margin: 2px;
+      padding: 2px 6px;
+
+}
+.footer{
+
+    background-color: #c7cbde;
+       margin-top:10px;
+
+}
+.main-container{
+
+    display: grid;
+    grid-template-columns: 72% 2fr;
+    width: 100%;
+    margin-top: 10px;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Float four columns side by side */
+.column {
+  float: left;
+  width: 50%;
+  padding: 20px 10px;
+
+}
+
+/* Remove extra left and right margins, due to padding */
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+
+  }
+}
+
+/* Style the counter cards */
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  text-align: center;
+  background-color: #f1f1f1;
+    color:gray;
+}
+a{
+text-decoration: none;
+}
+
+

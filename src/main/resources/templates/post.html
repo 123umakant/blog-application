@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Sign_Up Portal</title>
+    <style>
+        input{
+        padding:5px;
+        margin :5px;
+        }
+    .container-form{
+    display: flex;
+    justify-content: center;
+    border: 10px;
+    background-color: aliceblue;
+    align-content: center;
+
+    }
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="container-form">
+
+    <form action="post" method="post">
+        <table>
+            <thead>
+            <tr>
+                <th colspan="2"><h2>Submit Your Post</h2>
+                    <hr>
+                </th>
+            </tr>
+            </thead>
+            <tr>
+                <td><label>Title : </label></td>
+                <td><input type="text" name="title" placeholder="Enter Your post title" required><br></td>
+            </tr>
+            <tr>
+                <td><label>Enter your post excerpt : </label></td>
+                <td><input type="text" name="excerpt" placeholder="Enter Your post excerpt" required><br></td>
+            </tr>
+            <tr>
+                <td><label>Enter your post content : </label></td>
+                <td><textarea style="margin: 0px;height: 86px; width: 192px;" name="content" placeholder="content"
+                              required></textarea><br></td>
+            </tr>
+            <tr>
+                <td><label>Enter author name : </label></td>
+                <td><input type="text" name="author" placeholder="Author Name" required></input><br></td>
+            </tr>
+            <tr>
+                <td><label>Enter your Post tags : </label></td>
+                <td><input type="text" name="tags" placeholder="Enter Your post tags with comma separated" required><br>
+                </td>
+            </tr>
+            <input type="text" style="display:none" name="id" th:value="${id}"/>
+
+
+        </table>
+        <input style="margin-left: 33%;" type="submit">
+    </form>
+</div>
+
+</body>
+</html>
