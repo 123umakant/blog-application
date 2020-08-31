@@ -20,23 +20,21 @@ public class AuthController {
     @Autowired
     private AuthorService authService;
 
-
     @PostMapping("/register")
     public ResponseEntity<ResponseStatusDto> signUp(@RequestBody RegisterDto registerDto) throws JSONException {
 
-       boolean status = authService.register(registerDto);
+        boolean status = authService.register(registerDto);
 
-        ResponseStatusDto responseStatusDto =new ResponseStatusDto();
-        if (status==false) responseStatusDto.setStatus("Registration Successful");
-        else{
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto();
+        if (status == false) responseStatusDto.setStatus("Registration Successful");
+        else {
             responseStatusDto.setStatus("User Already Registered");
         }
-        return new ResponseEntity(responseStatusDto,HttpStatus.OK);
+        return new ResponseEntity(responseStatusDto, HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public String login(@RequestBody LoginDto loginDto) {
         return authService.login(loginDto);
     }
-
 }

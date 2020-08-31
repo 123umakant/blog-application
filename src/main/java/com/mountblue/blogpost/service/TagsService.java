@@ -19,8 +19,7 @@ import java.util.List;
 public class TagsService {
 
     private final int TAG_ID=0;
-    private final int POST_ID=2;
-    private final int POST_LIST_SIZE_INDEX=0;
+
     private final int POST_ID_INDEX=0;
 
     @Autowired
@@ -82,18 +81,9 @@ public class TagsService {
     }
 
     public List<Post> retireAllPostValues(String tagSearchId) {
-        List<Post> posts = null;
 
-        List<Object> postTags = postTagRepository.getPostsId(tagSearchId);
-        Iterator<Object> itr = postTags.iterator();
-        while (itr.hasNext()) {
-            Object[] postValues = (Object[]) itr.next();
-            BigInteger postId = (BigInteger) postValues[POST_ID];
-            if (postRepositoryImpl.findAllPostValue(postId.longValue()).size() > POST_LIST_SIZE_INDEX) {
-                posts.add(postRepositoryImpl.findAllPostValue(postId.longValue()).get(POST_ID_INDEX));
-            }
-        }
-        return posts;
+        List<PostTag> postTags = postTagRepository.getPostsId(tagSearchId);
+        return  postRepositoryImpl.findAllPostValue(postTags.get(POST_ID_INDEX).getPostId());
     }
 
     public int deleteTags(long id) {

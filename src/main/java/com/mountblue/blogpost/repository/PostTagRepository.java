@@ -21,10 +21,10 @@ public class PostTagRepository {
         entityManager.merge(postTag);
     }
 
-    public List<Object> getPostsId(String tagSearchId) {
+    public List<PostTag> getPostsId(String tagSearchId) {
         String query = "select * from post_tag where tag_id=" + tagSearchId;
 
-       return entityManager.createNativeQuery(query).getResultList();
+       return entityManager.createNativeQuery(query,PostTag.class).getResultList();
     }
 
     public int deletePostTags(long id) {
