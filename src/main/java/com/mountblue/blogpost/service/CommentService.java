@@ -17,9 +17,9 @@ import java.util.List;
 
 @Service
 public class CommentService {
-    private final int COMMENT_INDEX = 1;
-    private final int COMMENT_NAME = 4;
-    private final int COMMENT_EMAIL = 3;
+    private final int COMMENT_ID = 0;
+    private final int COMMENT = 1;
+    private final int COMMENT_POSTID = 5;
 
     @Autowired
     CommentRepository commentRepository;
@@ -61,10 +61,10 @@ public class CommentService {
 
         while (itr.hasNext()) {
             Object[] obj = (Object[]) itr.next();
-            BigInteger id = (BigInteger) obj[0];
+            BigInteger id = (BigInteger) obj[COMMENT_ID];
             comment.setId(Long.parseLong(String.valueOf(id)));
-            comment.setComment((String) obj[1]);
-            BigInteger posId = (BigInteger) obj[5];
+            comment.setComment((String) obj[COMMENT]);
+            BigInteger posId = (BigInteger) obj[COMMENT_POSTID];
             comment.setPostId(Long.parseLong(postId));
 
         }
@@ -72,8 +72,8 @@ public class CommentService {
     }
 
     public int deleteComment(CommentDto commentDto) {
-        String query = "delete from Comment where post_id=" + commentDto.getPostId();
-       return commentRepository.deleteComment(query);
+
+       return commentRepository.deleteComment(commentDto);
     }
 
     public int updateComment(CommentDto postCommentDto) {

@@ -9,6 +9,7 @@ public class PostDto {
     private String tags;
     private String excerpt;
 
+
     public long getId() {
         return id;
     }

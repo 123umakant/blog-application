@@ -2,7 +2,7 @@ package com.mountblue.blogpost.service;
 
 
 import com.mountblue.blogpost.model.Author;
-import com.mountblue.blogpost.repository.AuthorRepositoryNew;
+import com.mountblue.blogpost.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,11 +19,11 @@ import java.util.Collections;
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
-    AuthorRepositoryNew authorRepositoryNew;
+    AuthorRepository authorRepository;
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-      Author author = authorRepositoryNew.findByName(name).orElseThrow(() ->
+      Author author = authorRepository.findByName(name).orElseThrow(() ->
               new UsernameNotFoundException("No Author Found :" + name));
         return new User(author.getName(),author.getPassword(),true,true,true,true,
                 getAuthorities("ROLE_USER"));

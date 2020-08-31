@@ -21,12 +21,14 @@ public class PostTagRepository {
         entityManager.merge(postTag);
     }
 
-    public List<Object> getPostsId(String query) {
-        System.out.println(query);
+    public List<Object> getPostsId(String tagSearchId) {
+        String query = "select * from post_tag where tag_id=" + tagSearchId;
+
        return entityManager.createNativeQuery(query).getResultList();
     }
 
-    public int deletePostTags(String queryPostTags) {
+    public int deletePostTags(long id) {
+        String queryPostTags = "delete from post_tag where post_id=" + id;
        return entityManager.createNativeQuery(queryPostTags,PostTag.class).executeUpdate();
 
     }
