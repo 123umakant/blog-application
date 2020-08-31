@@ -1,5 +1,6 @@
 package com.mountblue.blogpost.repository;
 
+import com.mountblue.blogpost.dto.CommentDto;
 import com.mountblue.blogpost.model.Comment;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +26,8 @@ public class CommentRepository {
         return entityManager.createNativeQuery("select * from Comment where post_id=" + postId,Comment.class).getResultList();
     }
 
-    public int deleteComment(String query) {
+    public int deleteComment(CommentDto commentDto) {
+        String query = "delete from Comment where post_id=" + commentDto.getPostId();
          return entityManager.createNativeQuery(query,Comment.class).executeUpdate();
     }
 

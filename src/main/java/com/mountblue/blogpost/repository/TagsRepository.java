@@ -21,7 +21,8 @@ public class TagsRepository {
         return entityManager.merge(tag);
     }
 
-    public List<PostTag> retriveAllTags(String query) {
+    public List<PostTag> retrieveAllTags(long postId) {
+        String query = "select * from post_tag where post_id=" + postId;
         return entityManager.createNativeQuery(query, PostTag.class).getResultList();
 
     }
@@ -36,7 +37,8 @@ public class TagsRepository {
 
     }
 
-    public List<Tag> getTags(String queryTag) {
+    public List<Tag> getTags(PostTag postTag) {
+        String queryTag = "select * from tag where id=" + postTag.getTagId();
         return entityManager.createNativeQuery(queryTag, Tag.class).getResultList();
     }
 
@@ -45,8 +47,8 @@ public class TagsRepository {
         return entityManager.createNativeQuery("select distinct * from Tag limit 4",Tag.class).getResultList();
     }
 
-    public int deleteTags(String queryTag) {
-
+    public int deleteTags(long tagId) {
+        String queryTag = "delete from tag where id=" + tagId;
         return entityManager.createNativeQuery(queryTag,Tag.class).executeUpdate();
     }
 }

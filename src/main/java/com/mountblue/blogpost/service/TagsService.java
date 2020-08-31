@@ -1,10 +1,9 @@
 package com.mountblue.blogpost.service;
 
-import com.mountblue.blogpost.dto.TagDto;
 import com.mountblue.blogpost.model.Post;
 import com.mountblue.blogpost.model.PostTag;
 import com.mountblue.blogpost.model.Tag;
-import com.mountblue.blogpost.repository.PostRepository;
+import com.mountblue.blogpost.repository.PostRepositoryImpl;
 import com.mountblue.blogpost.repository.PostTagRepository;
 import com.mountblue.blogpost.repository.TagsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +18,18 @@ import java.util.List;
 @Service
 public class TagsService {
 
+    private final int TAG_ID=0;
+    private final int POST_ID=2;
+    private final int POST_LIST_SIZE_INDEX=0;
+    private final int POST_ID_INDEX=0;
+
     @Autowired
     TagsRepository tagsRepository;
 
     @Autowired
     PostTagRepository postTagRepository;
     @Autowired
-    PostRepository postRepository;
+    PostRepositoryImpl postRepositoryImpl;
 
     Tag tag = new Tag();
 
@@ -46,7 +50,7 @@ public class TagsService {
             Iterator itr = tagId.iterator();
             while (itr.hasNext()) {
                 Object[] obj = (Object[]) itr.next();
-                BigInteger intId = (BigInteger) obj[0];
+                BigInteger intId = (BigInteger) obj[TAG_ID];
                 id = intId.longValue();
             }
 
@@ -59,15 +63,15 @@ public class TagsService {
     }
 
     public List<List<Tag>> retrieveTags(long postId) {
-        String query = "select * from post_tag where post_id=" + postId;
+
         List<List<Tag>> tagsArray = new ArrayList<>();
-        List<PostTag> postTags = tagsRepository.retriveAllTags(query);
+        List<PostTag> postTags = tagsRepository.retrieveAllTags(postId);
         Iterator<PostTag> itr = postTags.iterator();
         while (itr.hasNext()) {
-            PostTag object = itr.next();
+            PostTag postTag = itr.next();
 
-            String queryTag = "select * from tag where id=" + object.getTagId();
-            List<Tag> tags = tagsRepository.getTags(queryTag);
+
+            List<Tag> tags = tagsRepository.getTags(postTag);
             tagsArray.add(tags);
         }
         return tagsArray;
@@ -79,33 +83,28 @@ public class TagsService {
 
     public List<Post> retireAllPostValues(String tagSearchId) {
         List<Post> posts = null;
-        String query = "select * from post_tag where tag_id=" + tagSearchId;
-        List<Object> postTags = postTagRepository.getPostsId(query);
+
+        List<Object> postTags = postTagRepository.getPostsId(tagSearchId);
         Iterator<Object> itr = postTags.iterator();
         while (itr.hasNext()) {
             Object[] postValues = (Object[]) itr.next();
-            BigInteger postId = (BigInteger) postValues[2];
-            if (postRepository.findAllPostValue(postId.longValue()).size() > 0) {
-                posts.add(postRepository.findAllPostValue(postId.longValue()).get(0));
+            BigInteger postId = (BigInteger) postValues[POST_ID];
+            if (postRepositoryImpl.findAllPostValue(postId.longValue()).size() > POST_LIST_SIZE_INDEX) {
+                posts.add(postRepositoryImpl.findAllPostValue(postId.longValue()).get(POST_ID_INDEX));
             }
         }
         return posts;
     }
 
     public int deleteTags(long id) {
-
-        String query = "select * from post_tag where post_id=" + id;
-        List<PostTag> postTags = tagsRepository.retriveAllTags(query);
+        List<PostTag> postTags = tagsRepository.retrieveAllTags(id);
 
         Iterator<PostTag> itr = postTags.iterator();
         while (itr.hasNext()) {
-            PostTag object = itr.next();
-            String queryTag = "delete from tag where id=" + object.getTagId();
-            tagsRepository.deleteTags(queryTag);
+            PostTag postTag = itr.next();
+           long tagId = postTag.getTagId();
+            tagsRepository.deleteTags(tagId);
         }
-        String queryPostTags = "delete from post_tag where post_id=" + id;
-        return postTagRepository.deletePostTags(queryPostTags);
+        return postTagRepository.deletePostTags(id);
     }
-
-
 }
