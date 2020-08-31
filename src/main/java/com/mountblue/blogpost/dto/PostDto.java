@@ -57,4 +57,16 @@ public class PostDto {
     public void setExcerpt(String excerpt) {
         this.excerpt = excerpt;
     }
+
+    @Override
+    public String toString() {
+        return "PostDto{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", tags='" + tags + '\'' +
+                ", excerpt='" + excerpt + '\'' +
+                '}';
+    }
 }

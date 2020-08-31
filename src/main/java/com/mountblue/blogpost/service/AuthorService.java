@@ -51,7 +51,6 @@ public class AuthorService {
         List<Author> author = authorRepositoryImpl.findId(email, password);
 
          long authorId = author.get(VISITOR_INDEX).getId();
-        System.out.println(authorId);
          String role = author.get(VISITOR_INDEX).getRole();
        return authorRepositoryImpl.getAuthorPosts(authorId,role);
     }

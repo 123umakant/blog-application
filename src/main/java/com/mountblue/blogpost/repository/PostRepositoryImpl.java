@@ -47,6 +47,7 @@ public class PostRepositoryImpl {
 
 
     public int updatePostData(Post post) {
+
         return entityManager.createNativeQuery("update post set author='" + post.getAuthor() + "',content='"
                 + post.getContent() + "',excerpt='" + post.getExcerpt() + "',title='" + post.getTitle() + "',updated_at='" +
                 post.getUpdatedAt() + "' where id=" + post.getId(),Post.class).executeUpdate();
