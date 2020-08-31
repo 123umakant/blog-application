@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 public class PostService {
-    private final int POST_ID=0;
+    private final int POST_ID = 0;
 
     @Autowired
     PostService postService;
@@ -82,22 +82,26 @@ public class PostService {
         User loggedInUser = authorService.getCurrentUser().orElseThrow(() -> new IllegalArgumentException("User Not Found"));
         author.setName(loggedInUser.getUsername());
         Optional<Author> authorId = authorRepository.findByName(author.getName());
-        if (!authorId.get().getRole().equals("admin")){
-
-            post.setAuthor_id(authorId.get().getId());
-        }
-
+        List<Post> postList= postRepositoryImpl.findAllPostValue(postDto.getId());
+        post.setAuthor_id(authorId.get().getId());
         Date date = new Date();
+        if(postDto.getTitle() !=null)
         post.setTitle(postDto.getTitle());
+        if(postDto.getExcerpt() !=null)
         post.setExcerpt(postDto.getExcerpt());
+        if(postDto.getContent() !=null)
         post.setContent(postDto.getContent());
+        if(postDto.getAuthor() !=null)
         post.setAuthor(postDto.getAuthor());
         post.setPublished(false);
         post.setUpdatedAt(date);
         post.setPublishedAt(date);
-
-       return postRepositoryImpl.updatePostData(post);
-
+        post.setId(postDto.getId());
+        int rowEffected=0;
+       if (postList.get(0).getAuthor_id() == authorId.get().getId() || authorId.get().getRole() =="admin") {
+           rowEffected = postRepositoryImpl.updatePostData(post);
+       }
+           return rowEffected;
     }
 
     public List<Post> fetchDataByAuthorName(String author) {
@@ -122,21 +126,20 @@ public class PostService {
 
     public void deletePost(long postId) {
         Author author = new Author();
-        String query=null;
+        String query = null;
         User loggedInUser = authorService.getCurrentUser().orElseThrow(() -> new IllegalArgumentException("User Not Found"));
         author.setName(loggedInUser.getUsername());
         Optional<Author> authorId = authorRepository.findByName(author.getName());
-            if(authorId.get().getRole().equals("admin")){
-                 query = "delete from post where id=" + postId;
-            }else
-            {
-                query = "delete from post where id=" + postId+" and author_id="+authorId.get().getId();
-            }
+        if (authorId.get().getRole().equals("admin")) {
+            query = "delete from post where id=" + postId;
+        } else {
+            query = "delete from post where id=" + postId + " and author_id=" + authorId.get().getId();
+        }
         postRepositoryImpl.deletePostData(query);
     }
 
     public long getId() {
-      long id=0;
+        long id = 0;
         List<Object> postId = postRepositoryImpl.getId();
         Iterator itr = postId.iterator();
         while (itr.hasNext()) {
@@ -149,6 +152,6 @@ public class PostService {
 
     public List<Post> getSearchedPostAll(Integer page, String search, String sort, String publishDate) {
 
-        return postRepositoryImpl.findPosts(page,search,sort,publishDate);
+        return postRepositoryImpl.findPosts(page, search, sort, publishDate);
     }
 }

@@ -16,7 +16,7 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("post")
+@RequestMapping("/post")
 public class PostController {
 
     @Autowired
@@ -47,6 +47,7 @@ public class PostController {
     public ResponseEntity<ResponseStatusDto> getPost(@RequestBody PostDto postDto) throws ParseException {
 
         ResponseStatusDto responseStatusDto = new ResponseStatusDto();
+
         int rowEffected = postService.updatePost(postDto);
         if (rowEffected > 0) {
             responseStatusDto.setStatus("Post Updated Successfully");
