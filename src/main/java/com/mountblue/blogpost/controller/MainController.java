@@ -43,17 +43,26 @@ public class MainController {
                     searchAndSortFields.getSearch(), searchAndSortFields.getSort(), searchAndSortFields.getPublishDate()));
         }
         if (searchAndSortFields.getSearch() != null && searchAndSortFields.getSearch() != "") {
+
             hashMap.put("post", postService.getSearchedPost(searchAndSortFields.getSearch()));
+
         } else if (searchAndSortFields.getSort() != null && !searchAndSortFields.getSort().equals("Sort")) {
+
             hashMap.put("post", postService.retireAllPostValues(searchAndSortFields.getPage(),
                     searchAndSortFields.getSort()));
+
         } else if (searchAndSortFields.getPublishDate() != null) {
+
             hashMap.put("post", postService.fetchDataByPublishDate(searchAndSortFields.getPublishDate()));
+
         } else if (searchAndSortFields.getTagSearch() != null) {
+
             hashMap.put("post", tagsService.retireAllPostValues(searchAndSortFields.getTagSearchId()));
+
         } else {
 
             hashMap.put("post", postService.retireAllPostValues(searchAndSortFields.getPage()));
+
         }
 
         hashMap.put("tags", tagsService.retireAllValues());

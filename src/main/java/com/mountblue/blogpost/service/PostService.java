@@ -98,7 +98,7 @@ public class PostService {
         post.setPublishedAt(date);
         post.setId(postDto.getId());
         int rowEffected=0;
-       if (postList.get(0).getAuthor_id() == authorId.get().getId() || authorId.get().getRole() =="admin") {
+       if (postList.get(0).getAuthor_id() == authorId.get().getId() || authorId.get().getRole().equals("admin")) {
            rowEffected = postRepositoryImpl.updatePostData(post);
        }
            return rowEffected;

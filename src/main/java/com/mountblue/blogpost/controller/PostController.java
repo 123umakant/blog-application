@@ -54,8 +54,6 @@ public class PostController {
         } else {
             responseStatusDto.setStatus("No Post Available");
         }
-
-
         return new ResponseEntity(responseStatusDto, HttpStatus.OK);
     }
 
