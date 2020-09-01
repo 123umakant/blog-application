@@ -72,18 +72,29 @@ public class CommentService {
     }
 
     public int deleteComment(CommentDto commentDto) {
-
+            Comment comment = new Comment();
+            if (commentDto.getId()<1){
+                return 0;
+            }
        return commentRepository.deleteComment(commentDto);
     }
 
     public int updateComment(CommentDto postCommentDto) {
 
+        if (postCommentDto.getEmail() ==null && postCommentDto.getId()>0){
+            return 0;
+        }
+
         Comment postComment = new Comment();
+        postComment.setId(postCommentDto.getId());
+        if(postCommentDto.getComment()!=null)
         postComment.setComment(postCommentDto.getComment());
+        if(postCommentDto.getName()!=null)
         postComment.setName(postCommentDto.getName());
         postComment.setEmail(postCommentDto.getEmail());
         postComment.setUpdatedAt(new Date());
         postComment.setPostId(postCommentDto.getPostId());
+
        return commentRepository.updateComment(postComment);
     }
 

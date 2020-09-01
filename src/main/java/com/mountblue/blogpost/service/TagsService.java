@@ -68,8 +68,6 @@ public class TagsService {
         Iterator<PostTag> itr = postTags.iterator();
         while (itr.hasNext()) {
             PostTag postTag = itr.next();
-
-
             List<Tag> tags = tagsRepository.getTags(postTag);
             tagsArray.add(tags);
         }

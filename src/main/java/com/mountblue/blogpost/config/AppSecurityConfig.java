@@ -44,6 +44,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/swagger-resources/**").permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/v2/**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/comment/**").permitAll()
+
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
