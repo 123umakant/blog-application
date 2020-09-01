@@ -27,7 +27,7 @@ public class CommentRepository {
     }
 
     public int deleteComment(CommentDto commentDto) {
-        String query = "delete from Comment where post_id=" + commentDto.getPostId();
+        String query = "delete from Comment where id=" + commentDto.getId();
          return entityManager.createNativeQuery(query,Comment.class).executeUpdate();
     }
 
@@ -38,7 +38,8 @@ public class CommentRepository {
 
     public int updateComment(Comment postComment) {
         String query ="update Comment set comment='" + postComment.getComment()+
-                "',updated_at='"+postComment.getUpdatedAt()+"'where post_id='"+postComment.getPostId()+"'";
+                "',updated_at='"+postComment.getUpdatedAt()+"'where id='"+postComment.getId()+"'";
        return entityManager.createNativeQuery(query,Comment.class).executeUpdate();
     }
+
 }
